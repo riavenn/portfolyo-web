@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/portfolyo-web/static/css/main.49730182.css",
-    "main.js": "/portfolyo-web/static/js/main.9dc603b2.js",
+    "main.css": "/portfolyo-web/static/css/main.8edb25e8.css",
+    "main.js": "/portfolyo-web/static/js/main.6a74036c.js",
     "static/js/453.ed3810f9.chunk.js": "/portfolyo-web/static/js/453.ed3810f9.chunk.js",
     "static/media/slick.svg": "/portfolyo-web/static/media/slick.2630a3e3eab21c607e21.svg",
     "static/media/slick.eot": "/portfolyo-web/static/media/slick.a4e97f5a2a64f0ab1323.eot",
     "static/media/slick.ttf": "/portfolyo-web/static/media/slick.c94f7671dcc99dce43e2.ttf",
     "static/media/slick.woff": "/portfolyo-web/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/portfolyo-web/index.html",
-    "main.49730182.css.map": "/portfolyo-web/static/css/main.49730182.css.map",
-    "main.9dc603b2.js.map": "/portfolyo-web/static/js/main.9dc603b2.js.map",
+    "main.8edb25e8.css.map": "/portfolyo-web/static/css/main.8edb25e8.css.map",
+    "main.6a74036c.js.map": "/portfolyo-web/static/js/main.6a74036c.js.map",
     "453.ed3810f9.chunk.js.map": "/portfolyo-web/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.49730182.css",
-    "static/js/main.9dc603b2.js"
+    "static/css/main.8edb25e8.css",
+    "static/js/main.6a74036c.js"
   ]
 }
