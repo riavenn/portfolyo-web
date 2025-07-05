@@ -10,7 +10,7 @@ import {
   FaLinkedinIn,
   FaEnvelope,
   FaGithub,
-} from "react-icons/fa";
+} from "react-icons/fa6";
 import { SiJavascript, SiTypescript } from "react-icons/si";
 import Slider from "react-slick";
 import emailjs from "emailjs-com";
