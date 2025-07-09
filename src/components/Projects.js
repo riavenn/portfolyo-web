@@ -4,9 +4,9 @@ import "./Projects.css";
 const projectsData = [
   {
     id: 1,
-    title: "Mert Saykal Portfolyo",
+    title: "Sephiron Hotel",
     imageUrl: process.env.PUBLIC_URL + "/project1.jpg",
-    demoUrl: "https://mertsaykal.com/",
+    demoUrl: "https://sephiron-hotel.vercel.app/",
   },
   {
     id: 2,
