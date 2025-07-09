@@ -12,7 +12,7 @@ const projectsData = [
     id: 2,
     title: "Lezzet Durağı Restaurant",
     imageUrl: process.env.PUBLIC_URL + "/project2.jpg",
-    demoUrl: "https://restaurant-web-kappa  -pink.vercel.app/",
+    demoUrl: "https://restaurant-web-kappa-pink.vercel.app/",
   },
   {
     id: 3,
