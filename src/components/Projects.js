@@ -26,6 +26,18 @@ const projectsData = [
     imageUrl: process.env.PUBLIC_URL + "/project4.jpg",
     demoUrl: "https://healt-web.vercel.app/",
   },
+  {
+    id: 5,
+    title: "Adalet Hukuk Bürosu",
+    imageUrl: process.env.PUBLIC_URL + "/project5.jpg",
+    demoUrl: "https://law-web-seven.vercel.app/",
+  },
+  {
+    id: 6,
+    title: "Bella Vista Restaurant",
+    imageUrl: process.env.PUBLIC_URL + "/project6.jpg",
+    demoUrl: "https://bellavista-restaurant.vercel.app/",
+  },
 ];
 
 function Projects() {
