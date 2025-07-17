@@ -418,7 +418,6 @@ body {
 
 .service-item h3 {
   padding: 1.5rem 1.5rem 1rem;
-  color: #333;
   min-height: 80px;
   display: flex;
   align-items: center;
@@ -435,7 +434,7 @@ body {
     rgba(32, 58, 67, 0.92),
     rgba(44, 83, 100, 0.92)
   );
-  color: white;
+  color: #fff;
   text-decoration: none;
   padding: 0.8rem 1.5rem;
   margin: 1.5rem;
@@ -837,6 +836,7 @@ button[type="submit"]:hover {
   border-radius: 5px;
   font-size: 1rem;
   transition: border-color 0.3s;
+  color: #333;
 }
 
 .form-group input:focus,

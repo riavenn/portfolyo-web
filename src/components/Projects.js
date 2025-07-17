@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Projects.css";
 
-const projectsData = [
+const defaultProjectsData = [
   {
     id: 1,
     title: "Sephiron Hotel",
@@ -41,6 +41,22 @@ const projectsData = [
 ];
 
 function Projects() {
+  const [projectsData, setProjectsData] = useState(defaultProjectsData);
+
+  useEffect(() => {
+    // Admin panelinden kaydedilen projeleri yükle
+    const savedProjects = localStorage.getItem("adminProjects");
+    if (savedProjects) {
+      try {
+        const parsedProjects = JSON.parse(savedProjects);
+        setProjectsData(parsedProjects);
+      } catch (error) {
+        console.error("Projeler yüklenirken hata oluştu:", error);
+        setProjectsData(defaultProjectsData);
+      }
+    }
+  }, []);
+
   return (
     <div className="projects-container">
       <h2 className="projects-title">Projelerim</h2>

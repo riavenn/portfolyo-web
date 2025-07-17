@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Routes, Route } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import "./App.css";
 import "slick-carousel/slick/slick.css";
@@ -16,6 +17,9 @@ import Slider from "react-slick";
 import emailjs from "emailjs-com";
 import { Link } from "react-scroll";
 import Projects from "./components/Projects";
+import Login from "./components/Login";
+import AdminPanel from "./components/AdminPanel";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function FadeInSection(props) {
   const [ref, inView] = useInView({
@@ -30,7 +34,18 @@ function FadeInSection(props) {
   );
 }
 
-function App() {
+// Ana sayfa bileşeni
+function HomePage() {
+  const [siteContent, setSiteContent] = useState(null);
+
+  useEffect(() => {
+    // Admin panelinden kaydedilen site içeriğini yükle
+    const savedContent = localStorage.getItem("siteContent");
+    if (savedContent) {
+      setSiteContent(JSON.parse(savedContent));
+    }
+  }, []);
+
   return (
     <div className="App">
       <div className="video-background">
@@ -51,12 +66,12 @@ function App() {
       <Navbar />
       <FadeInSection>
         <section id="header">
-          <Header />
+          <Header siteContent={siteContent} />
         </section>
       </FadeInSection>
       <FadeInSection>
         <section id="services">
-          <Services />
+          <Services siteContent={siteContent} />
         </section>
       </FadeInSection>
       <FadeInSection>
@@ -66,11 +81,28 @@ function App() {
       </FadeInSection>
       <FadeInSection>
         <section id="contact">
-          <Contact />
+          <Contact siteContent={siteContent} />
         </section>
       </FadeInSection>
-      <Footer />
+      <Footer siteContent={siteContent} />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<Login />} />
+      <Route 
+        path="/admin" 
+        element={
+          <ProtectedRoute>
+            <AdminPanel />
+          </ProtectedRoute>
+        } 
+      />
+    </Routes>
   );
 }
 
@@ -147,12 +179,14 @@ function Navbar() {
   );
 }
 
-function TypeWriter() {
-  const titles = [
-    "Web Tasarımı",
-    "Web Site Tasarımı",
-    "Web Geliştirme Hizmetleri",
-  ];
+function TypeWriter({ siteContent }) {
+  const titles = React.useMemo(() => {
+    return siteContent?.header?.animatedTitles || [
+      "Web Tasarımı",
+      "Web Site Tasarımı",
+      "Web Geliştirme Hizmetleri"
+    ];
+  }, [siteContent?.header?.animatedTitles]);
   const [titleIndex, setTitleIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -192,7 +226,7 @@ function TypeWriter() {
   return <span className="animated-text">{currentText}</span>;
 }
 
-function Header() {
+function Header({ siteContent }) {
   const skills = [
     { name: "HTML", icon: <FaHtml5 /> },
     { name: "CSS", icon: <FaCss3Alt /> },
@@ -201,47 +235,53 @@ function Header() {
     { name: "React", icon: <FaReact /> },
   ];
 
+  // Varsayılan değerler
+  const defaultHeader = {
+    name: "Mert Saykal",
+    title: "Web Tasarımı",
+    description: "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak. En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum. Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
+    profileImage: "/avatar.jpg"
+  };
+
+  const defaultSocial = {
+    linkedin: "https://www.linkedin.com/in/mert-saykal/",
+    github: "https://github.com/riavenn",
+    email: "mertsaykal0@gmail.com"
+  };
+
+  const headerData = siteContent?.header || defaultHeader;
+  const socialData = siteContent?.social || defaultSocial;
+
   return (
     <header className="header" id="header">
       <div className="header-content">
         <div className="profile-image">
-          <img src={process.env.PUBLIC_URL + "/avatar.jpg"} alt="Profil" />
+          <img src={process.env.PUBLIC_URL + headerData.profileImage} alt="Profil" />
           <div className="social-links">
             <a
-              href="https://www.linkedin.com/in/mert-saykal/"
+              href={socialData.linkedin}
               target="_blank"
               rel="noopener noreferrer">
               <FaLinkedinIn />
             </a>
             <a
-              href="https://github.com/riavenn"
+              href={socialData.github}
               target="_blank"
               rel="noopener noreferrer">
               <FaGithub />
             </a>
-            <a href="mailto:mertsaykal0@gmail.com">
+            <a href={`mailto:${socialData.email}`}>
               <FaEnvelope />
             </a>
           </div>
         </div>
         <div className="profile-text">
-          <h1>Mert Saykal</h1>
+          <h1>{headerData.name}</h1>
           <h2>
-            <TypeWriter />
+            <TypeWriter siteContent={siteContent} />
           </h2>
           <p className="about-me">
-            Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren
-            bir front-end developer olarak, amacım her projede müşteri
-            memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere
-            imza atmak. <br></br> <br></br>En son yenilikçi teknolojileri
-            kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze
-            hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum.
-            <br></br>
-            <br></br>
-            Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en
-            iyi şekilde temsil edecek bir platform inşa ediyorum. Gelin, dijital
-            varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini
-            birlikte tasarlayalım ve geliştirelim!
+            {headerData.description}
           </p>
           <div className="header-skills">
             {skills.map((skill, index) => (
@@ -257,8 +297,8 @@ function Header() {
   );
 }
 
-function Services() {
-  const services = [
+function Services({ siteContent }) {
+  const defaultServices = [
     {
       title: "Web Geliştirme",
       image: "/web-dev.jpg",
@@ -280,6 +320,8 @@ function Services() {
       link: "#contact",
     },
   ];
+  
+  const services = siteContent?.services || defaultServices;
 
   const settings = {
     infinite: true,
@@ -341,7 +383,15 @@ function Services() {
   );
 }
 
-function Footer() {
+function Footer({ siteContent }) {
+  const defaultSocial = {
+    linkedin: "https://www.linkedin.com/in/mert-saykal/",
+    github: "https://github.com/riavenn",
+    email: "mertsaykal0@gmail.com"
+  };
+
+  const socialData = siteContent?.social || defaultSocial;
+
   return (
     <footer className="footer">
       <div className="footer-top">
@@ -353,18 +403,18 @@ function Footer() {
       <div className="footer-bottom">
         <div className="social-icons">
           <a
-            href="https://www.linkedin.com/in/mert-saykal/"
+            href={socialData.linkedin}
             target="_blank"
             rel="noopener noreferrer">
             <FaLinkedinIn />
           </a>
           <a
-            href="https://github.com/riavenn"
+            href={socialData.github}
             target="_blank"
             rel="noopener noreferrer">
             <FaGithub />
           </a>
-          <a href="mailto:mertsaykal0@gmail.com">
+          <a href={`mailto:${socialData.email}`}>
             <FaEnvelope />
           </a>
         </div>
@@ -373,7 +423,8 @@ function Footer() {
   );
 }
 
-function Contact() {
+function Contact({ siteContent }) {
+  // contactData şu an kullanılmıyor ama gelecekte kullanılabilir
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -393,6 +444,26 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Form verilerini admin panele kaydet
+    const savedContent = JSON.parse(localStorage.getItem('siteContent') || '{}');
+    const newSubmission = {
+      name: formData.name,
+      email: formData.email,
+      subject: formData.subject,
+      message: formData.message,
+      date: new Date().toLocaleString('tr-TR')
+    };
+    
+    const updatedContent = {
+      ...savedContent,
+      contact: {
+        ...savedContent.contact,
+        formSubmissions: [...(savedContent.contact?.formSubmissions || []), newSubmission]
+      }
+    };
+    
+    localStorage.setItem('siteContent', JSON.stringify(updatedContent));
 
     const serviceID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
     const templateID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
