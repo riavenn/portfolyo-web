@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./AdminPanel.css";
+import { supabaseService } from "../lib/supabase";
 import {
   FaSignOutAlt,
   FaUser,
@@ -24,6 +25,8 @@ const AdminPanel = () => {
   const [projects, setProjects] = useState([]);
   const [editingProject, setEditingProject] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [newProject, setNewProject] = useState({
     title: "",
     imageUrl: "",
@@ -107,97 +110,192 @@ const AdminPanel = () => {
   }, [searchParams, activeTab]);
 
   useEffect(() => {
-    // Giriş kontrolü
-    const isLoggedIn = localStorage.getItem("isAdminLoggedIn");
-    if (!isLoggedIn) {
-      navigate("/login");
-      return;
-    }
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-    // Projeler için başlangıç verisi
-    const initialProjects = [
-      {
-        id: 1,
-        title: "Sephiron Hotel",
-        imageUrl: process.env.PUBLIC_URL + "/project1.jpg",
-        demoUrl: "https://sephiron-hotel.vercel.app/",
-      },
-      {
-        id: 2,
-        title: "Lezzet Durağı Restaurant",
-        imageUrl: process.env.PUBLIC_URL + "/project2.jpg",
-        demoUrl: "https://restaurant-web-kappa-pink.vercel.app/",
-      },
-      {
-        id: 3,
-        title: "Grand Max Luxury Hotel",
-        imageUrl: process.env.PUBLIC_URL + "/project3.jpg",
-        demoUrl: "https://hotel-web-five.vercel.app/",
-      },
-      {
-        id: 4,
-        title: "NISMED Klinik",
-        imageUrl: process.env.PUBLIC_URL + "/project4.jpg",
-        demoUrl: "https://healt-web.vercel.app/",
-      },
-      {
-        id: 5,
-        title: "Adalet Hukuk Bürosu",
-        imageUrl: process.env.PUBLIC_URL + "/project5.jpg",
-        demoUrl: "https://law-web-seven.vercel.app/",
-      },
-      {
-        id: 6,
-        title: "Bella Vista Restaurant",
-        imageUrl: process.env.PUBLIC_URL + "/project6.jpg",
-        demoUrl: "https://bellavista-restaurant.vercel.app/",
-      },
-    ];
+        // Giriş kontrolü
+        const isLoggedIn = localStorage.getItem("isAdminLoggedIn");
+        if (!isLoggedIn) {
+          navigate("/login");
+          return;
+        }
 
-    // Projeler localStorage'dan yükle veya başlangıç verilerini kullan
-    const savedProjects = localStorage.getItem("adminProjects");
-    if (savedProjects) {
-      setProjects(JSON.parse(savedProjects));
-    } else {
-      setProjects(initialProjects);
-      localStorage.setItem("adminProjects", JSON.stringify(initialProjects));
-    }
+        // Projeler için başlangıç verisi
+        const initialProjects = [
+          {
+            id: 1,
+            title: "Sephiron Hotel",
+            imageUrl: process.env.PUBLIC_URL + "/project1.jpg",
+            demoUrl: "https://sephiron-hotel.vercel.app/",
+          },
+          {
+            id: 2,
+            title: "Lezzet Durağı Restaurant",
+            imageUrl: process.env.PUBLIC_URL + "/project2.jpg",
+            demoUrl: "https://restaurant-web-kappa-pink.vercel.app/",
+          },
+          {
+            id: 3,
+            title: "Grand Max Luxury Hotel",
+            imageUrl: process.env.PUBLIC_URL + "/project3.jpg",
+            demoUrl: "https://hotel-web-five.vercel.app/",
+          },
+          {
+            id: 4,
+            title: "NISMED Klinik",
+            imageUrl: process.env.PUBLIC_URL + "/project4.jpg",
+            demoUrl: "https://healt-web.vercel.app/",
+          },
+          {
+            id: 5,
+            title: "Adalet Hukuk Bürosu",
+            imageUrl: process.env.PUBLIC_URL + "/project5.jpg",
+            demoUrl: "https://law-web-seven.vercel.app/",
+          },
+          {
+            id: 6,
+            title: "Bella Vista Restaurant",
+            imageUrl: process.env.PUBLIC_URL + "/project6.jpg",
+            demoUrl: "https://bellavista-restaurant.vercel.app/",
+          },
+        ];
 
-    // Site içeriğini localStorage'dan yükle veya varsayılan değerleri kullan
-    const savedContent = localStorage.getItem("siteContent");
-    if (savedContent) {
-      const parsedContent = JSON.parse(savedContent);
-      // Varsayılan değerlerle birleştir (eksik alanları doldur)
-      const mergedContent = {
-        ...getDefaultSiteContent(),
-        ...parsedContent,
-        header: {
-          ...getDefaultSiteContent().header,
-          ...parsedContent.header,
-        },
-        services: parsedContent.services || getDefaultSiteContent().services,
-        contact: {
-          ...getDefaultSiteContent().contact,
-          ...parsedContent.contact,
-        },
-        social: {
-          ...getDefaultSiteContent().social,
-          ...parsedContent.social,
-        },
-        siteSettings: {
-          ...getDefaultSiteContent().siteSettings,
-          ...parsedContent.siteSettings,
-        },
-      };
-      setSiteContent(mergedContent);
-      // Birleştirilmiş içeriği kaydet
-      localStorage.setItem("siteContent", JSON.stringify(mergedContent));
-    } else {
-      const defaultContent = getDefaultSiteContent();
-      setSiteContent(defaultContent);
-      localStorage.setItem("siteContent", JSON.stringify(defaultContent));
-    }
-  }, [navigate]);
+        try {
+          // Supabase'den projeleri yükle
+          const supabaseProjects = await supabaseService.getProjects();
+          if (supabaseProjects.length > 0) {
+            // Supabase formatından local formata dönüştür
+            const formattedProjects = supabaseProjects.map(project => ({
+              id: project.project_id || project.id,
+              title: project.title,
+              imageUrl: project.image_url,
+              demoUrl: project.demo_url
+            }));
+            setProjects(formattedProjects);
+          } else {
+            // Eğer Supabase'de veri yoksa, başlangıç verilerini kullan ve kaydet
+            setProjects(initialProjects);
+            await supabaseService.saveProjects(initialProjects);
+          }
+        } catch (supabaseError) {
+          console.warn('Supabase projeler yüklenemedi, localStorage kullanılıyor:', supabaseError);
+          // Supabase hatası durumunda localStorage'ı fallback olarak kullan
+          const savedProjects = localStorage.getItem("adminProjects");
+          if (savedProjects) {
+            setProjects(JSON.parse(savedProjects));
+          } else {
+            setProjects(initialProjects);
+            localStorage.setItem("adminProjects", JSON.stringify(initialProjects));
+          }
+        }
+
+        try {
+          // Supabase'den site içeriğini yükle
+          const supabaseSiteContent = await supabaseService.getSiteContent();
+          if (supabaseSiteContent) {
+            // Varsayılan değerlerle birleştir
+            const mergedContent = {
+              ...getDefaultSiteContent(),
+              ...supabaseSiteContent,
+              header: {
+                ...getDefaultSiteContent().header,
+                ...supabaseSiteContent.header,
+              },
+              services: supabaseSiteContent.services || getDefaultSiteContent().services,
+              contact: {
+                ...getDefaultSiteContent().contact,
+                ...supabaseSiteContent.contact,
+              },
+              social: {
+                ...getDefaultSiteContent().social,
+                ...supabaseSiteContent.social,
+              },
+              siteSettings: {
+                ...getDefaultSiteContent().siteSettings,
+                ...supabaseSiteContent.siteSettings,
+              },
+            };
+            setSiteContent(mergedContent);
+          } else {
+            // Eğer Supabase'de veri yoksa, varsayılan içeriği kullan ve kaydet
+            const defaultContent = getDefaultSiteContent();
+            setSiteContent(defaultContent);
+            await supabaseService.saveSiteContent(defaultContent);
+          }
+        } catch (supabaseError) {
+          console.warn('Supabase site içeriği yüklenemedi, localStorage kullanılıyor:', supabaseError);
+          // Supabase hatası durumunda localStorage'ı fallback olarak kullan
+          const savedContent = localStorage.getItem("siteContent");
+          if (savedContent) {
+            const parsedContent = JSON.parse(savedContent);
+            const mergedContent = {
+              ...getDefaultSiteContent(),
+              ...parsedContent,
+              header: {
+                ...getDefaultSiteContent().header,
+                ...parsedContent.header,
+              },
+              services: parsedContent.services || getDefaultSiteContent().services,
+              contact: {
+                ...getDefaultSiteContent().contact,
+                ...parsedContent.contact,
+              },
+              social: {
+                ...getDefaultSiteContent().social,
+                ...parsedContent.social,
+              },
+              siteSettings: {
+                ...getDefaultSiteContent().siteSettings,
+                ...parsedContent.siteSettings,
+              },
+            };
+            setSiteContent(mergedContent);
+          } else {
+            const defaultContent = getDefaultSiteContent();
+            setSiteContent(defaultContent);
+            localStorage.setItem("siteContent", JSON.stringify(defaultContent));
+          }
+        }
+
+      } catch (error) {
+        console.error('Veri yükleme hatası:', error);
+        setError('Veriler yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+
+    // Real-time subscriptions
+    const projectsSubscription = supabaseService.subscribeToProjects((payload) => {
+      console.log('Projects updated in admin:', payload);
+      // Reload projects when there's a change
+      loadData();
+    });
+
+    const siteContentSubscription = supabaseService.subscribeToSiteContent((payload) => {
+      console.log('Site content updated in admin:', payload);
+      if (payload.new && payload.new.content) {
+        setSiteContent(payload.new.content);
+      }
+    });
+
+    const formSubmissionsSubscription = supabaseService.subscribeToFormSubmissions((payload) => {
+      console.log('Form submissions updated:', payload);
+      // Reload data to get updated form submissions
+      loadData();
+    });
+
+    // Cleanup subscriptions on unmount
+    return () => {
+       supabaseService.unsubscribe(projectsSubscription);
+       supabaseService.unsubscribe(siteContentSubscription);
+       supabaseService.unsubscribe(formSubmissionsSubscription);
+     };
+   }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("isAdminLoggedIn");
@@ -205,36 +303,62 @@ const AdminPanel = () => {
     navigate("/");
   };
 
-  const saveProjectsToStorage = (updatedProjects) => {
-    localStorage.setItem("adminProjects", JSON.stringify(updatedProjects));
-    setProjects(updatedProjects);
+  const saveProjectsToStorage = async (updatedProjects) => {
+    try {
+      // Önce state'i güncelle
+      setProjects(updatedProjects);
+      
+      // Supabase'e kaydet
+      await supabaseService.saveProjects(updatedProjects);
+      
+      // Fallback olarak localStorage'a da kaydet
+      localStorage.setItem("adminProjects", JSON.stringify(updatedProjects));
+    } catch (error) {
+      console.error('Projeler kaydedilirken hata:', error);
+      // Supabase hatası durumunda sadece localStorage'a kaydet
+      localStorage.setItem("adminProjects", JSON.stringify(updatedProjects));
+      alert('Projeler kaydedilirken bir hata oluştu, ancak yerel olarak kaydedildi.');
+    }
   };
 
-  const saveSiteContentToStorage = (updatedContent) => {
-    localStorage.setItem("siteContent", JSON.stringify(updatedContent));
-    setSiteContent(updatedContent);
+  const saveSiteContentToStorage = async (updatedContent) => {
+    try {
+      // Önce state'i güncelle
+      setSiteContent(updatedContent);
+      
+      // Supabase'e kaydet
+      await supabaseService.saveSiteContent(updatedContent);
+      
+      // Fallback olarak localStorage'a da kaydet
+      localStorage.setItem("siteContent", JSON.stringify(updatedContent));
+    } catch (error) {
+      console.error('Site içeriği kaydedilirken hata:', error);
+      // Supabase hatası durumunda sadece localStorage'a kaydet
+      localStorage.setItem("siteContent", JSON.stringify(updatedContent));
+      alert('Site içeriği kaydedilirken bir hata oluştu, ancak yerel olarak kaydedildi.');
+    }
   };
 
   const handleEditProject = (project) => {
     setEditingProject({ ...project });
   };
 
-  const handleSaveEdit = () => {
+  const handleSaveEdit = async () => {
     const updatedProjects = projects.map((p) =>
       p.id === editingProject.id ? editingProject : p
     );
-    saveProjectsToStorage(updatedProjects);
+    await saveProjectsToStorage(updatedProjects);
     setEditingProject(null);
   };
 
-  const handleDeleteProject = (id) => {
+  const handleDeleteProject = async (id) => {
     if (window.confirm("Bu projeyi silmek istediğinizden emin misiniz?")) {
       const updatedProjects = projects.filter((p) => p.id !== id);
-      saveProjectsToStorage(updatedProjects);
+      await saveProjectsToStorage(updatedProjects);
     }
   };
 
-  const handleAddProject = () => {
+  const handleAddProject = async () => {
     if (newProject.title && newProject.imageUrl && newProject.demoUrl) {
       const newId = Math.max(...projects.map((p) => p.id)) + 1;
       const projectToAdd = {
@@ -242,7 +366,7 @@ const AdminPanel = () => {
         id: newId,
       };
       const updatedProjects = [...projects, projectToAdd];
-      saveProjectsToStorage(updatedProjects);
+      await saveProjectsToStorage(updatedProjects);
       setNewProject({ title: "", imageUrl: "", demoUrl: "" });
       setShowAddForm(false);
     }
@@ -253,7 +377,7 @@ const AdminPanel = () => {
     setEditingService({ ...siteContent.services[index], index });
   };
 
-  const handleSaveServiceEdit = () => {
+  const handleSaveServiceEdit = async () => {
     const updatedServices = [...siteContent.services];
     updatedServices[editingService.index] = {
       title: editingService.title,
@@ -263,11 +387,11 @@ const AdminPanel = () => {
       ...siteContent,
       services: updatedServices,
     };
-    saveSiteContentToStorage(updatedContent);
+    await saveSiteContentToStorage(updatedContent);
     setEditingService(null);
   };
 
-  const handleDeleteService = (index) => {
+  const handleDeleteService = async (index) => {
     if (window.confirm("Bu hizmeti silmek istediğinizden emin misiniz?")) {
       const updatedServices = siteContent.services.filter(
         (_, i) => i !== index
@@ -276,37 +400,35 @@ const AdminPanel = () => {
         ...siteContent,
         services: updatedServices,
       };
-      saveSiteContentToStorage(updatedContent);
+      await saveSiteContentToStorage(updatedContent);
     }
   };
 
-  const handleAddService = () => {
+  const handleAddService = async () => {
     if (newService.title && newService.image) {
       const updatedServices = [...siteContent.services, newService];
       const updatedContent = {
         ...siteContent,
         services: updatedServices,
       };
-      saveSiteContentToStorage(updatedContent);
+      await saveSiteContentToStorage(updatedContent);
       setNewService({ title: "", image: "" });
       setShowAddServiceForm(false);
     }
   };
 
-  const handleSaveHeader = () => {
-    saveSiteContentToStorage(siteContent);
+  const handleSaveHeader = async () => {
+    await saveSiteContentToStorage(siteContent);
     alert("Header bilgileri kaydedildi!");
   };
 
-
-
-  const handleSaveSocial = () => {
-    saveSiteContentToStorage(siteContent);
+  const handleSaveSocial = async () => {
+    await saveSiteContentToStorage(siteContent);
     alert("Sosyal medya linkleri kaydedildi!");
   };
 
-  const handleSaveSettings = () => {
-    saveSiteContentToStorage(siteContent);
+  const handleSaveSettings = async () => {
+    await saveSiteContentToStorage(siteContent);
     alert("Site ayarları kaydedildi!");
   };
 
@@ -318,7 +440,7 @@ const AdminPanel = () => {
     }
   };
 
-  const handleSaveSkillEdit = () => {
+  const handleSaveSkillEdit = async () => {
     const currentSkills = siteContent.header?.skills || [];
     const updatedSkills = [...currentSkills];
     updatedSkills[editingSkill.index] = {
@@ -332,11 +454,11 @@ const AdminPanel = () => {
         skills: updatedSkills,
       },
     };
-    saveSiteContentToStorage(updatedContent);
+    await saveSiteContentToStorage(updatedContent);
     setEditingSkill(null);
   };
 
-  const handleDeleteSkill = (index) => {
+  const handleDeleteSkill = async (index) => {
     if (window.confirm("Bu yeteneği silmek istediğinizden emin misiniz?")) {
       const currentSkills = siteContent.header?.skills || [];
       const updatedSkills = currentSkills.filter((_, i) => i !== index);
@@ -347,11 +469,11 @@ const AdminPanel = () => {
           skills: updatedSkills,
         },
       };
-      saveSiteContentToStorage(updatedContent);
+      await saveSiteContentToStorage(updatedContent);
     }
   };
 
-  const handleAddSkill = () => {
+  const handleAddSkill = async () => {
     if (newSkill.name && newSkill.icon) {
       const currentSkills = siteContent.header?.skills || [];
       const updatedSkills = [...currentSkills, newSkill];
@@ -362,14 +484,14 @@ const AdminPanel = () => {
           skills: updatedSkills,
         },
       };
-      saveSiteContentToStorage(updatedContent);
+      await saveSiteContentToStorage(updatedContent);
       setNewSkill({ name: "", icon: "" });
       setShowAddSkillForm(false);
     }
   };
 
   // Animasyonlu başlık yönetimi
-  const handleAddAnimatedTitle = () => {
+  const handleAddAnimatedTitle = async () => {
     if (newAnimatedTitle.trim()) {
       const currentTitles = siteContent.header?.animatedTitles || [];
       const updatedTitles = [...currentTitles, newAnimatedTitle.trim()];
@@ -380,12 +502,12 @@ const AdminPanel = () => {
           animatedTitles: updatedTitles,
         },
       };
-      saveSiteContentToStorage(updatedContent);
+      await saveSiteContentToStorage(updatedContent);
       setNewAnimatedTitle("");
     }
   };
 
-  const handleDeleteAnimatedTitle = (index) => {
+  const handleDeleteAnimatedTitle = async (index) => {
     const currentTitles = siteContent.header?.animatedTitles || [];
     if (currentTitles.length > 1) {
       const updatedTitles = currentTitles.filter((_, i) => i !== index);
@@ -396,7 +518,7 @@ const AdminPanel = () => {
           animatedTitles: updatedTitles,
         },
       };
-      saveSiteContentToStorage(updatedContent);
+      await saveSiteContentToStorage(updatedContent);
     } else {
       alert("En az bir animasyonlu başlık bulunmalıdır!");
     }
@@ -1020,6 +1142,29 @@ const AdminPanel = () => {
       </button>
     </div>
   );
+
+  if (loading) {
+    return (
+      <div className="admin-panel">
+        <div className="admin-loading">
+          <h2>Yükleniyor...</h2>
+          <p>Veriler Supabase'den yükleniyor, lütfen bekleyin.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="admin-panel">
+        <div className="admin-error">
+          <h2>Hata</h2>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()}>Sayfayı Yenile</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-panel">

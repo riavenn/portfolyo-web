@@ -20,6 +20,7 @@ import Projects from "./components/Projects";
 import Login from "./components/Login";
 import AdminPanel from "./components/AdminPanel";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { supabaseService } from "./lib/supabase";
 
 function FadeInSection(props) {
   const [ref, inView] = useInView({
@@ -37,14 +38,63 @@ function FadeInSection(props) {
 // Ana sayfa bileşeni
 function HomePage() {
   const [siteContent, setSiteContent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Admin panelinden kaydedilen site içeriğini yükle
-    const savedContent = localStorage.getItem("siteContent");
-    if (savedContent) {
-      setSiteContent(JSON.parse(savedContent));
-    }
+    const loadSiteContent = async () => {
+      try {
+        setLoading(true);
+        // Önce Supabase'den site içeriğini yüklemeye çalış
+        const supabaseContent = await supabaseService.getSiteContent();
+
+        if (supabaseContent) {
+          setSiteContent(supabaseContent);
+        } else {
+          // Supabase'de veri yoksa localStorage'dan yükle
+          const savedContent = localStorage.getItem("siteContent");
+          if (savedContent) {
+            setSiteContent(JSON.parse(savedContent));
+          }
+        }
+      } catch (error) {
+        console.error("Supabase'den site içeriği yüklenirken hata:", error);
+        // Hata durumunda localStorage'a geri dön
+        const savedContent = localStorage.getItem("siteContent");
+        if (savedContent) {
+          setSiteContent(JSON.parse(savedContent));
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSiteContent();
+
+    // Real-time subscription for site content updates
+    const subscription = supabaseService.subscribeToSiteContent((payload) => {
+      console.log("Site content updated:", payload);
+      if (payload.new && payload.new.content) {
+        setSiteContent(payload.new.content);
+      }
+    });
+
+    // Cleanup subscription on unmount
+    return () => {
+      supabaseService.unsubscribe(subscription);
+    };
   }, []);
+
+  if (loading) {
+    return (
+      <div className="App">
+        <div className="loading-container">
+          <h2>Yükleniyor...</h2>
+          <p>Site içeriği yükleniyor, lütfen bekleyin.</p>
+          <div className="loading-spinner"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="App">
@@ -94,13 +144,13 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<Login />} />
-      <Route 
-        path="/admin" 
+      <Route
+        path="/admin"
         element={
           <ProtectedRoute>
             <AdminPanel />
           </ProtectedRoute>
-        } 
+        }
       />
     </Routes>
   );
@@ -181,11 +231,13 @@ function Navbar() {
 
 function TypeWriter({ siteContent }) {
   const titles = React.useMemo(() => {
-    return siteContent?.header?.animatedTitles || [
-      "Web Tasarımı",
-      "Web Site Tasarımı",
-      "Web Geliştirme Hizmetleri"
-    ];
+    return (
+      siteContent?.header?.animatedTitles || [
+        "Web Tasarımı",
+        "Web Site Tasarımı",
+        "Web Geliştirme Hizmetleri",
+      ]
+    );
   }, [siteContent?.header?.animatedTitles]);
   const [titleIndex, setTitleIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
@@ -239,14 +291,15 @@ function Header({ siteContent }) {
   const defaultHeader = {
     name: "Mert Saykal",
     title: "Web Tasarımı",
-    description: "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak. En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum. Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
-    profileImage: "/avatar.jpg"
+    description:
+      "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak. En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum. Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
+    profileImage: "/avatar.jpg",
   };
 
   const defaultSocial = {
     linkedin: "https://www.linkedin.com/in/mert-saykal/",
     github: "https://github.com/riavenn",
-    email: "mertsaykal0@gmail.com"
+    email: "mertsaykal0@gmail.com",
   };
 
   const headerData = siteContent?.header || defaultHeader;
@@ -256,7 +309,10 @@ function Header({ siteContent }) {
     <header className="header" id="header">
       <div className="header-content">
         <div className="profile-image">
-          <img src={process.env.PUBLIC_URL + headerData.profileImage} alt="Profil" />
+          <img
+            src={process.env.PUBLIC_URL + headerData.profileImage}
+            alt="Profil"
+          />
           <div className="social-links">
             <a
               href={socialData.linkedin}
@@ -280,9 +336,7 @@ function Header({ siteContent }) {
           <h2>
             <TypeWriter siteContent={siteContent} />
           </h2>
-          <p className="about-me">
-            {headerData.description}
-          </p>
+          <p className="about-me">{headerData.description}</p>
           <div className="header-skills">
             {skills.map((skill, index) => (
               <div key={index} className="header-skill-item">
@@ -320,7 +374,7 @@ function Services({ siteContent }) {
       link: "#contact",
     },
   ];
-  
+
   const services = siteContent?.services || defaultServices;
 
   const settings = {
@@ -387,7 +441,7 @@ function Footer({ siteContent }) {
   const defaultSocial = {
     linkedin: "https://www.linkedin.com/in/mert-saykal/",
     github: "https://github.com/riavenn",
-    email: "mertsaykal0@gmail.com"
+    email: "mertsaykal0@gmail.com",
   };
 
   const socialData = siteContent?.social || defaultSocial;
@@ -408,10 +462,7 @@ function Footer({ siteContent }) {
             rel="noopener noreferrer">
             <FaLinkedinIn />
           </a>
-          <a
-            href={socialData.github}
-            target="_blank"
-            rel="noopener noreferrer">
+          <a href={socialData.github} target="_blank" rel="noopener noreferrer">
             <FaGithub />
           </a>
           <a href={`mailto:${socialData.email}`}>
@@ -442,28 +493,52 @@ function Contact({ siteContent }) {
 
   const form = useRef();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Form verilerini admin panele kaydet
-    const savedContent = JSON.parse(localStorage.getItem('siteContent') || '{}');
     const newSubmission = {
       name: formData.name,
       email: formData.email,
       subject: formData.subject,
       message: formData.message,
-      date: new Date().toLocaleString('tr-TR')
+      date: new Date().toLocaleString("tr-TR"),
     };
-    
-    const updatedContent = {
-      ...savedContent,
-      contact: {
-        ...savedContent.contact,
-        formSubmissions: [...(savedContent.contact?.formSubmissions || []), newSubmission]
-      }
-    };
-    
-    localStorage.setItem('siteContent', JSON.stringify(updatedContent));
+
+    try {
+      // Form verilerini Supabase'e kaydet
+      await supabaseService.saveFormSubmission(newSubmission);
+
+      // Aynı zamanda mevcut site içeriğini güncelle
+      const currentContent = await supabaseService.getSiteContent();
+      const updatedContent = {
+        ...currentContent,
+        contact: {
+          ...currentContent?.contact,
+          formSubmissions: [
+            ...(currentContent?.contact?.formSubmissions || []),
+            newSubmission,
+          ],
+        },
+      };
+      await supabaseService.saveSiteContent(updatedContent);
+    } catch (error) {
+      console.error("Form verisi Supabase'e kaydedilirken hata:", error);
+      // Hata durumunda localStorage'a kaydet
+      const savedContent = JSON.parse(
+        localStorage.getItem("siteContent") || "{}"
+      );
+      const updatedContent = {
+        ...savedContent,
+        contact: {
+          ...savedContent.contact,
+          formSubmissions: [
+            ...(savedContent.contact?.formSubmissions || []),
+            newSubmission,
+          ],
+        },
+      };
+      localStorage.setItem("siteContent", JSON.stringify(updatedContent));
+    }
 
     const serviceID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
     const templateID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
