@@ -133,4 +133,65 @@ export const supabaseService = {
       supabase.removeChannel(subscription);
     }
   },
+
+  // Test fonksiyonu - Supabase bağlantısını kontrol eder
+  async testConnection() {
+    try {
+      console.log('🔄 Supabase bağlantısı test ediliyor...');
+      
+      // Supabase bağlantısını test et
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('*')
+        .limit(1);
+      
+      if (error) {
+        console.error('❌ Supabase bağlantı hatası:', error);
+        return { success: false, error };
+      }
+      
+      console.log('✅ Supabase bağlantısı başarılı!');
+      console.log('📊 Mevcut site_content verisi:', data);
+      
+      // Tabloların varlığını kontrol et
+      const tables = ['projects', 'site_content', 'form_submissions'];
+      const tableStatus = {};
+      
+      for (const table of tables) {
+        try {
+          const { data: tableData, error: tableError } = await supabase
+            .from(table)
+            .select('*')
+            .limit(1);
+          
+          tableStatus[table] = {
+            exists: !tableError,
+            error: tableError?.message || null,
+            hasData: tableData && tableData.length > 0
+          };
+        } catch (err) {
+          tableStatus[table] = {
+            exists: false,
+            error: err.message,
+            hasData: false
+          };
+        }
+      }
+      
+      console.log('📋 Tablo durumu:', tableStatus);
+      
+      return { 
+        success: true, 
+        data, 
+        tableStatus,
+        message: 'Supabase bağlantısı başarılı!' 
+      };
+      
+    } catch (error) {
+      console.error('❌ Supabase test hatası:', error);
+      return { success: false, error: error.message };
+    }
+  }
 };
+
+export default supabaseService;

@@ -82,6 +82,44 @@
   50% { opacity: 0.7; }
 }
 
+/* Supabase Status Styles */
+.supabase-status {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.status-indicator {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-indicator.success {
+  color: #4ade80;
+}
+
+.status-indicator.error {
+  color: #f87171;
+}
+
+.error-details {
+  font-size: 14px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 3px solid #fbbf24;
+  margin-top: 8px;
+  word-break: break-word;
+}
+
 .admin-loading {
   display: flex;
   flex-direction: column;

@@ -708,6 +708,41 @@
   background: linear-gradient(135deg, #0099ee 0%, #0077bb 100%);
 }
 
+/* Table Status Styles */
+.table-status {
+  margin-top: 15px;
+  text-align: left;
+}
+
+.table-status h4 {
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 14px;
+}
+
+.table-item {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.table-name.exists {
+  color: #4ade80;
+}
+
+.table-name.missing {
+  color: #f87171;
+}
+
+.has-data {
+  color: #3b82f6;
+  font-size: 12px;
+}
+
+.table-error {
+  color: #f59e0b;
+  font-size: 11px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .admin-panel {
