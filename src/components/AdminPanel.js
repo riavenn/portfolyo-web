@@ -27,7 +27,6 @@ const AdminPanel = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [supabaseStatus, setSupabaseStatus] = useState(null);
   const [newProject, setNewProject] = useState({
     title: "",
     imageUrl: "",
@@ -123,9 +122,7 @@ const AdminPanel = () => {
           return;
         }
 
-        // Supabase bağlantısını test et
-        const connectionTest = await supabaseService.testConnection();
-        setSupabaseStatus(connectionTest);
+        // Supabase bağlantı testi kaldırıldı
 
         // Projeler için başlangıç verisi
         const initialProjects = [
@@ -1153,35 +1150,7 @@ const AdminPanel = () => {
       <div className="admin-panel">
         <div className="admin-loading">
           <h2>Yükleniyor...</h2>
-          <p>Veriler Supabase'den yükleniyor, lütfen bekleyin.</p>
-          
-          {supabaseStatus && (
-            <div className="supabase-status">
-              <div className={`status-indicator ${supabaseStatus.success ? 'success' : 'error'}`}>
-                {supabaseStatus.success ? '✅' : '❌'} 
-                Supabase: {supabaseStatus.success ? 'Bağlı' : 'Bağlantı Hatası'}
-              </div>
-              {!supabaseStatus.success && supabaseStatus.error && (
-                <div className="error-details">
-                  Hata: {supabaseStatus.error.message || supabaseStatus.error}
-                </div>
-              )}
-              {supabaseStatus.success && supabaseStatus.tableStatus && (
-                <div className="table-status">
-                  <h4>Tablo Durumu:</h4>
-                  {Object.entries(supabaseStatus.tableStatus).map(([table, status]) => (
-                    <div key={table} className="table-item">
-                      <span className={`table-name ${status.exists ? 'exists' : 'missing'}`}>
-                        {status.exists ? '✅' : '❌'} {table}
-                      </span>
-                      {status.hasData && <span className="has-data"> (Veri var)</span>}
-                      {status.error && <span className="table-error"> - {status.error}</span>}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+          <p>Veriler yükleniyor, lütfen bekleyin.</p>
         </div>
       </div>
     );

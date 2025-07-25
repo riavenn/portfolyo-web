@@ -157,12 +157,14 @@ INSERT INTO site_content (id, content) VALUES (
 3. Aşağıdaki örnek verileri ekleyin:
 
 **Proje 1:**
+
 - `project_id`: 1
 - `title`: "E-Ticaret Sitesi"
 - `image_url`: "https://via.placeholder.com/400x300"
 - `demo_url`: "https://example.com"
 
 **Proje 2:**
+
 - `project_id`: 2
 - `title`: "Blog Uygulaması"
 - `image_url`: "https://via.placeholder.com/400x300"
@@ -207,6 +209,7 @@ Uygulama artık otomatik olarak Supabase bağlantısını test eder:
 
 1. Web uygulamanızı başlatın: `npm start`
 2. Ana sayfada loading ekranında Supabase durumunu göreceksiniz:
+
    - ✅ **Supabase: Bağlı** - Bağlantı başarılı
    - ❌ **Supabase: Bağlantı Hatası** - Bağlantı problemi var
 
@@ -219,6 +222,7 @@ Uygulama artık otomatik olarak Supabase bağlantısını test eder:
 ### Manuel Test İşlemleri
 
 Aşağıdaki işlemleri test edin:
+
 - Proje ekleme/düzenleme/silme
 - Site içeriği güncelleme
 - İletişim formu gönderimi
@@ -227,6 +231,7 @@ Aşağıdaki işlemleri test edin:
 ### Console Logları
 
 Tarayıcı console'unda (F12) aşağıdaki logları görebilirsiniz:
+
 - 🔄 Supabase bağlantısı test ediliyor...
 - ✅ Supabase bağlantısı başarılı!
 - 📊 Mevcut site_content verisi
@@ -235,20 +240,24 @@ Tarayıcı console'unda (F12) aşağıdaki logları görebilirsiniz:
 ## Sorun Giderme
 
 ### Bağlantı Sorunları
+
 - `.env` dosyasındaki Supabase URL ve API key'lerini kontrol edin
 - Supabase projesinin aktif olduğundan emin olun
 
 ### RLS Politika Sorunları
+
 - Admin işlemleri için authentication gereklidir
 - Geliştirme aşamasında RLS'yi geçici olarak devre dışı bırakabilirsiniz
 
 ### Real-time Sorunları
+
 - Supabase Dashboard'da Real-time özelliğinin aktif olduğunu kontrol edin
 - Browser console'da WebSocket bağlantı hatalarını kontrol edin
 
 ## Güvenlik Notları
 
 1. **Production'da mutlaka yapın:**
+
    - RLS politikalarını gözden geçirin
    - API key'leri güvenli tutun
    - HTTPS kullanın

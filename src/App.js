@@ -39,17 +39,12 @@ function FadeInSection(props) {
 function HomePage() {
   const [siteContent, setSiteContent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [supabaseStatus, setSupabaseStatus] = useState(null);
 
   useEffect(() => {
     const loadSiteContent = async () => {
       try {
         setLoading(true);
-
-        // Supabase bağlantısını test et
-        const connectionTest = await supabaseService.testConnection();
-        setSupabaseStatus(connectionTest);
-
+        
         // Önce Supabase'den site içeriğini yüklemeye çalış
         const supabaseContent = await supabaseService.getSiteContent();
 
@@ -90,33 +85,9 @@ function HomePage() {
     };
   }, []);
 
+  // Yükleme ekranını kaldırdık, içerik hazır olana kadar bekleyeceğiz
   if (loading) {
-    return (
-      <div className="App">
-        <div className="loading-container">
-          <h2>Yükleniyor...</h2>
-          <p>Site içeriği yükleniyor, lütfen bekleyin.</p>
-          <div className="loading-spinner"></div>
-
-          {supabaseStatus && (
-            <div className="supabase-status">
-              <div
-                className={`status-indicator ${
-                  supabaseStatus.success ? "success" : "error"
-                }`}>
-                {supabaseStatus.success ? "✅" : "❌"}
-                Supabase: {supabaseStatus.success ? "Bağlı" : "Bağlantı Hatası"}
-              </div>
-              {!supabaseStatus.success && supabaseStatus.error && (
-                <div className="error-details">
-                  Hata: {supabaseStatus.error.message || supabaseStatus.error}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-    );
+    return null; // İçerik yüklenene kadar hiçbir şey gösterme
   }
 
   return (
