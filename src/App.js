@@ -100,7 +100,7 @@ function HomePage() {
           playsInline
           poster={process.env.PUBLIC_URL + "/avatar.png"}>
           <source
-            src={process.env.PUBLIC_URL + "/header-bg.mp4"}
+            src={"/header-bg.mp4"}
             type="video/mp4"
           />
           <track kind="captions" srcLang="tr" label="Türkçe Altyazı" />{" "}

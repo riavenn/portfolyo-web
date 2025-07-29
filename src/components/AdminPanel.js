@@ -21,7 +21,9 @@ import {
 const AdminPanel = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "header");
+  const [activeTab, setActiveTab] = useState(
+    searchParams.get("tab") || "header"
+  );
   const [projects, setProjects] = useState([]);
   const [editingProject, setEditingProject] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -169,11 +171,11 @@ const AdminPanel = () => {
           const supabaseProjects = await supabaseService.getProjects();
           if (supabaseProjects.length > 0) {
             // Supabase formatından local formata dönüştür
-            const formattedProjects = supabaseProjects.map(project => ({
+            const formattedProjects = supabaseProjects.map((project) => ({
               id: project.project_id || project.id,
               title: project.title,
               imageUrl: project.image_url,
-              demoUrl: project.demo_url
+              demoUrl: project.demo_url,
             }));
             setProjects(formattedProjects);
           } else {
@@ -182,15 +184,14 @@ const AdminPanel = () => {
             await supabaseService.saveProjects(initialProjects);
           }
         } catch (supabaseError) {
-          console.warn('Supabase projeler yüklenemedi, localStorage kullanılıyor:', supabaseError);
-          // Supabase hatası durumunda localStorage'ı fallback olarak kullan
-          const savedProjects = localStorage.getItem("adminProjects");
-          if (savedProjects) {
-            setProjects(JSON.parse(savedProjects));
-          } else {
-            setProjects(initialProjects);
-            localStorage.setItem("adminProjects", JSON.stringify(initialProjects));
-          }
+          console.error(
+            "Supabase projeleri yüklenirken hata oluştu:",
+            supabaseError
+          );
+          setError(
+            "Projeler yüklenemedi. Lütfen internet bağlantınızı kontrol edin."
+          );
+          setProjects(initialProjects); // Hata durumunda başlangıç verilerini göster
         }
 
         try {
@@ -205,7 +206,9 @@ const AdminPanel = () => {
                 ...getDefaultSiteContent().header,
                 ...supabaseSiteContent.header,
               },
-              services: supabaseSiteContent.services || getDefaultSiteContent().services,
+              services:
+                supabaseSiteContent.services ||
+                getDefaultSiteContent().services,
               contact: {
                 ...getDefaultSiteContent().contact,
                 ...supabaseSiteContent.contact,
@@ -227,43 +230,20 @@ const AdminPanel = () => {
             await supabaseService.saveSiteContent(defaultContent);
           }
         } catch (supabaseError) {
-          console.warn('Supabase site içeriği yüklenemedi, localStorage kullanılıyor:', supabaseError);
-          // Supabase hatası durumunda localStorage'ı fallback olarak kullan
-          const savedContent = localStorage.getItem("siteContent");
-          if (savedContent) {
-            const parsedContent = JSON.parse(savedContent);
-            const mergedContent = {
-              ...getDefaultSiteContent(),
-              ...parsedContent,
-              header: {
-                ...getDefaultSiteContent().header,
-                ...parsedContent.header,
-              },
-              services: parsedContent.services || getDefaultSiteContent().services,
-              contact: {
-                ...getDefaultSiteContent().contact,
-                ...parsedContent.contact,
-              },
-              social: {
-                ...getDefaultSiteContent().social,
-                ...parsedContent.social,
-              },
-              siteSettings: {
-                ...getDefaultSiteContent().siteSettings,
-                ...parsedContent.siteSettings,
-              },
-            };
-            setSiteContent(mergedContent);
-          } else {
-            const defaultContent = getDefaultSiteContent();
-            setSiteContent(defaultContent);
-            localStorage.setItem("siteContent", JSON.stringify(defaultContent));
-          }
+          console.error(
+            "Supabase site içeriği yüklenirken hata oluştu:",
+            supabaseError
+          );
+          setError(
+            "Site içeriği yüklenemedi. Lütfen internet bağlantınızı kontrol edin."
+          );
+          setSiteContent(getDefaultSiteContent()); // Hata durumunda varsayılan içeriği göster
         }
-
       } catch (error) {
-        console.error('Veri yükleme hatası:', error);
-        setError('Veriler yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin.');
+        console.error("Veri yükleme hatası:", error);
+        setError(
+          "Veriler yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin."
+        );
       } finally {
         setLoading(false);
       }
@@ -272,32 +252,37 @@ const AdminPanel = () => {
     loadData();
 
     // Real-time subscriptions
-    const projectsSubscription = supabaseService.subscribeToProjects((payload) => {
-      console.log('Projects updated in admin:', payload);
-      // Reload projects when there's a change
-      loadData();
-    });
-
-    const siteContentSubscription = supabaseService.subscribeToSiteContent((payload) => {
-      console.log('Site content updated in admin:', payload);
-      if (payload.new && payload.new.content) {
-        setSiteContent(payload.new.content);
+    const projectsSubscription = supabaseService.subscribeToProjects(
+      (payload) => {
+        console.log("Projects updated in admin:", payload);
+        // Reload projects when there's a change
+        loadData();
       }
-    });
+    );
 
-    const formSubmissionsSubscription = supabaseService.subscribeToFormSubmissions((payload) => {
-      console.log('Form submissions updated:', payload);
-      // Reload data to get updated form submissions
-      loadData();
-    });
+    const siteContentSubscription = supabaseService.subscribeToSiteContent(
+      (payload) => {
+        console.log("Site content updated in admin:", payload);
+        if (payload.new && payload.new.content) {
+          setSiteContent(payload.new.content);
+        }
+      }
+    );
+
+    const formSubmissionsSubscription =
+      supabaseService.subscribeToFormSubmissions((payload) => {
+        console.log("Form submissions updated:", payload);
+        // Reload data to get updated form submissions
+        loadData();
+      });
 
     // Cleanup subscriptions on unmount
     return () => {
-       supabaseService.unsubscribe(projectsSubscription);
-       supabaseService.unsubscribe(siteContentSubscription);
-       supabaseService.unsubscribe(formSubmissionsSubscription);
-     };
-   }, [navigate]);
+      supabaseService.unsubscribe(projectsSubscription);
+      supabaseService.unsubscribe(siteContentSubscription);
+      supabaseService.unsubscribe(formSubmissionsSubscription);
+    };
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("isAdminLoggedIn");
@@ -309,17 +294,14 @@ const AdminPanel = () => {
     try {
       // Önce state'i güncelle
       setProjects(updatedProjects);
-      
       // Supabase'e kaydet
       await supabaseService.saveProjects(updatedProjects);
-      
-      // Fallback olarak localStorage'a da kaydet
-      localStorage.setItem("adminProjects", JSON.stringify(updatedProjects));
+      alert("Projeler başarıyla kaydedildi!");
     } catch (error) {
-      console.error('Projeler kaydedilirken hata:', error);
-      // Supabase hatası durumunda sadece localStorage'a kaydet
-      localStorage.setItem("adminProjects", JSON.stringify(updatedProjects));
-      alert('Projeler kaydedilirken bir hata oluştu, ancak yerel olarak kaydedildi.');
+      console.error("Projeler Supabase e kaydedilirken hata:", error);
+      alert(
+        "Hata: Projeler kaydedilemedi. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin."
+      );
     }
   };
 
@@ -327,17 +309,14 @@ const AdminPanel = () => {
     try {
       // Önce state'i güncelle
       setSiteContent(updatedContent);
-      
       // Supabase'e kaydet
       await supabaseService.saveSiteContent(updatedContent);
-      
-      // Fallback olarak localStorage'a da kaydet
-      localStorage.setItem("siteContent", JSON.stringify(updatedContent));
+      alert("Site içeriği başarıyla kaydedildi!");
     } catch (error) {
-      console.error('Site içeriği kaydedilirken hata:', error);
-      // Supabase hatası durumunda sadece localStorage'a kaydet
-      localStorage.setItem("siteContent", JSON.stringify(updatedContent));
-      alert('Site içeriği kaydedilirken bir hata oluştu, ancak yerel olarak kaydedildi.');
+      console.error("Site içeriği Supabase e kaydedilirken hata:", error);
+      alert(
+        "Hata: Site içeriği kaydedilemedi. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin."
+      );
     }
   };
 
@@ -1162,7 +1141,9 @@ const AdminPanel = () => {
         <div className="admin-error">
           <h2>Hata</h2>
           <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Sayfayı Yenile</button>
+          <button onClick={() => window.location.reload()}>
+            Sayfayı Yenile
+          </button>
         </div>
       </div>
     );
@@ -1228,5 +1209,5 @@ const AdminPanel = () => {
     </div>
   );
 };
-  
+
 export default AdminPanel;
