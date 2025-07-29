@@ -44,7 +44,7 @@ function HomePage() {
     const loadSiteContent = async () => {
       try {
         setLoading(true);
-        
+
         // Önce Supabase'den site içeriğini yüklemeye çalış
         const supabaseContent = await supabaseService.getSiteContent();
 
@@ -99,10 +99,7 @@ function HomePage() {
           muted
           playsInline
           poster={process.env.PUBLIC_URL + "/avatar.png"}>
-          <source
-            src={"/header-bg.mp4"}
-            type="video/mp4"
-          />
+          <source src={"/header-bg.mp4"} type="video/mp4" />
           <track kind="captions" srcLang="tr" label="Türkçe Altyazı" />{" "}
           <track kind="descriptions" srcLang="tr" label="Türkçe Açıklamalar" />{" "}
         </video>

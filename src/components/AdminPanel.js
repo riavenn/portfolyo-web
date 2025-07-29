@@ -179,9 +179,8 @@ const AdminPanel = () => {
             }));
             setProjects(formattedProjects);
           } else {
-            // Eğer Supabase'de veri yoksa, başlangıç verilerini kullan ve kaydet
+            // Eğer Supabase'de veri yoksa, başlangıç verilerini kullan
             setProjects(initialProjects);
-            await supabaseService.saveProjects(initialProjects);
           }
         } catch (supabaseError) {
           console.error(
@@ -224,10 +223,9 @@ const AdminPanel = () => {
             };
             setSiteContent(mergedContent);
           } else {
-            // Eğer Supabase'de veri yoksa, varsayılan içeriği kullan ve kaydet
+            // Eğer Supabase'de veri yoksa, varsayılan içeriği kullan
             const defaultContent = getDefaultSiteContent();
             setSiteContent(defaultContent);
-            await supabaseService.saveSiteContent(defaultContent);
           }
         } catch (supabaseError) {
           console.error(
@@ -294,8 +292,15 @@ const AdminPanel = () => {
     try {
       // Önce state'i güncelle
       setProjects(updatedProjects);
+      // Supabase'in beklediği formata dönüştür
+      const projectsToSave = updatedProjects.map(p => ({
+        id: p.id,
+        title: p.title,
+        image_url: p.imageUrl, // Alan adını dönüştür
+        demo_url: p.demoUrl, // Alan adını dönüştür
+      }));
       // Supabase'e kaydet
-      await supabaseService.saveProjects(updatedProjects);
+      await supabaseService.saveProjects(projectsToSave);
       alert("Projeler başarıyla kaydedildi!");
     } catch (error) {
       console.error("Projeler Supabase e kaydedilirken hata:", error);
@@ -309,14 +314,14 @@ const AdminPanel = () => {
     try {
       // Önce state'i güncelle
       setSiteContent(updatedContent);
+      // Supabase'e göndermeden önce veriyi temizle
+      const sanitizedContent = JSON.parse(JSON.stringify(updatedContent));
       // Supabase'e kaydet
-      await supabaseService.saveSiteContent(updatedContent);
+      await supabaseService.saveSiteContent(sanitizedContent);
       alert("Site içeriği başarıyla kaydedildi!");
     } catch (error) {
       console.error("Site içeriği Supabase e kaydedilirken hata:", error);
-      alert(
-        "Hata: Site içeriği kaydedilemedi. Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin."
-      );
+      alert(`Hata: ${error.message}`);
     }
   };
 

@@ -15,30 +15,28 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export const supabaseService = {
   // Projeler
   async getProjects() {
-    const { data, error } = await supabase
-      .from("projects")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const { data, error } = await supabase.from("projects").select("*");
 
     if (error) throw error;
-    return data || [];
+    return data || [];  
   },
 
   async saveProjects(projects) {
-    // Önce mevcut projeleri sil
-    await supabase.from("projects").delete().neq("id", 0);
-
-    // Yeni projeleri ekle
-    const { data, error } = await supabase.from("projects").insert(
-      projects.map((project) => ({
+    const { data, error } = await supabase.from('projects').upsert(
+      projects.map(project => ({
+        id: project.id,
         title: project.title,
         image_url: project.imageUrl,
-        demo_url: project.demoUrl,
-        project_id: project.id,
-      }))
+        demo_url: project.demoUrl
+      })),
+      { onConflict: 'id' } // 'id' sütununa göre çakışma kontrolü
     );
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase saveProjects hatası:', error);
+      throw error;
+    }
+
     return data;
   },
 
@@ -60,7 +58,9 @@ export const supabaseService = {
       updated_at: new Date().toISOString(),
     });
 
-    if (error) throw error;
+    if (error) {
+      throw new Error(error.message);
+    }
     return data;
   },
 
