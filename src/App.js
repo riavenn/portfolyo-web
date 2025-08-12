@@ -282,8 +282,9 @@ function Header({ siteContent }) {
   const defaultHeader = {
     name: "Mert Saykal",
     title: "Web Tasarımı",
-    description:
-      "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak. En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum. Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
+    description1: "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak.",
+    description2: "En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum.",
+    description3: "Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
     profileImage: "/avatar.jpg",
   };
 
@@ -327,7 +328,11 @@ function Header({ siteContent }) {
           <h2>
             <TypeWriter siteContent={siteContent} />
           </h2>
-          <p className="about-me">{headerData.description}</p>
+          <div className="about-me-container">
+            <p className="about-me">{headerData.description1}</p>
+            <p className="about-me">{headerData.description2}</p>
+            <p className="about-me">{headerData.description3}</p>
+          </div>
           <div className="header-skills">
             {skills.map((skill, index) => (
               <div key={index} className="header-skill-item">

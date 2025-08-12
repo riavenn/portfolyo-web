@@ -343,6 +343,15 @@ body {
   object-fit: cover;
 }
 
+.about-me-container {
+  margin-bottom: 1.5rem;
+}
+
+.about-me {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
 .social-links {
   display: flex;
   justify-content: center;

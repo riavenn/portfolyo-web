@@ -45,8 +45,12 @@ const AdminPanel = () => {
         "Web Site Tasarımı",
         "Web Geliştirme Hizmetleri",
       ],
-      description:
-        "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak. En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum. Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
+      description1:
+        "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak.",
+      description2:
+        "En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum.",
+      description3:
+        "Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
       profileImage: "/avatar.jpg",
       skills: [
         { name: "HTML", icon: "FaHtml5" },
@@ -293,7 +297,7 @@ const AdminPanel = () => {
       // Önce state'i güncelle
       setProjects(updatedProjects);
       // Supabase'in beklediği formata dönüştür
-      const projectsToSave = updatedProjects.map(p => ({
+      const projectsToSave = updatedProjects.map((p) => ({
         id: p.id,
         title: p.title,
         image_url: p.imageUrl, // Alan adını dönüştür
@@ -807,16 +811,42 @@ const AdminPanel = () => {
         </div>
 
         <div className="setting-item">
-          <h3>Açıklama</h3>
+          <h3>Açıklama (1. Parça)</h3>
           <textarea
-            value={siteContent.header?.description || ""}
+            value={siteContent.header?.description1 || ""}
             onChange={(e) =>
               setSiteContent({
                 ...siteContent,
-                header: { ...siteContent.header, description: e.target.value },
+                header: { ...siteContent.header, description1: e.target.value },
               })
             }
-            rows="6"
+            rows="3"
+          />
+        </div>
+        <div className="setting-item">
+          <h3>Açıklama (2. Parça)</h3>
+          <textarea
+            value={siteContent.header?.description2 || ""}
+            onChange={(e) =>
+              setSiteContent({
+                ...siteContent,
+                header: { ...siteContent.header, description2: e.target.value },
+              })
+            }
+            rows="3"
+          />
+        </div>
+        <div className="setting-item">
+          <h3>Açıklama (3. Parça)</h3>
+          <textarea
+            value={siteContent.header?.description3 || ""}
+            onChange={(e) =>
+              setSiteContent({
+                ...siteContent,
+                header: { ...siteContent.header, description3: e.target.value },
+              })
+            }
+            rows="3"
           />
         </div>
         <div className="setting-item">
