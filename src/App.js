@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import "./App.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import "./components/Services.css";
 import {
   FaHtml5,
   FaCss3Alt,
@@ -13,7 +12,6 @@ import {
   FaGithub,
 } from "react-icons/fa6";
 import { SiJavascript, SiTypescript } from "react-icons/si";
-import Slider from "react-slick";
 import emailjs from "emailjs-com";
 import { Link } from "react-scroll";
 import Projects from "./components/Projects";
@@ -352,82 +350,56 @@ function Services({ siteContent }) {
     {
       title: "Web Geliştirme",
       image: "/web-dev.jpg",
+      description: "Modern ve performanslı web siteleri ile dijital dünyada yerinizi alın. Size özel çözümlerle markanızı en iyi şekilde temsil ediyoruz.",
       link: "#contact",
     },
     {
       title: "UI/UX Tasarımı",
       image: "/ui-ux.jpg",
+      description: "Kullanıcı dostu ve estetik arayüzler tasarlayarak, kullanıcılarınızın web sitenizde keyifli bir deneyim yaşamasını sağlıyoruz.",
       link: "#contact",
     },
     {
       title: "SEO Optimizasyonu",
       image: "/seo.jpg",
+      description: "Arama motorlarında üst sıralarda yer alarak daha fazla müşteriye ulaşın. Sitenizi SEO uyumlu hale getirerek organik trafiğinizi artırıyoruz.",
       link: "#contact",
     },
     {
       title: "Sosyal Medya Yönetimi",
       image: "/social.jpg",
+      description: "Sosyal medya hesaplarınızı profesyonelce yöneterek marka bilinirliğinizi artırıyor ve hedef kitlenizle etkileşiminizi güçlendiriyoruz.",
       link: "#contact",
     },
   ];
 
   const services = siteContent?.services || defaultServices;
 
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
-
   return (
     <section className="services" id="services">
       <h2>Hizmetler</h2>
-      <div className="services-slider-container">
-        <Slider {...settings}>
-          {services.map((service, index) => (
-            <div key={index} className="service-item-slide">
-              <div className="service-item">
-                <div className="service-image-container">
-                  <img
-                    src={process.env.PUBLIC_URL + service.image}
-                    alt={service.title}
-                  />
-                </div>
-                <h3>{service.title}</h3>
-                <Link
-                  to="contact"
-                  spy={true}
-                  smooth={true}
-                  offset={-70}
-                  duration={0}
-                  className="service-button">
-                  Detaylı Bilgi
-                </Link>
-              </div>
+      <div className="services-grid">
+        {services.map((service, index) => (
+          <div key={index} className="service-card">
+            <div className="service-image-container">
+              <img
+                src={process.env.PUBLIC_URL + service.image}
+                alt={service.title}
+              />
             </div>
-          ))}
-        </Slider>
+            <h3>{service.title}</h3>
+            <p>{service.description}</p>
+            <Link
+              to="contact"
+              spy={true}
+              smooth={true}
+              offset={-70}
+              duration={0}
+              className="service-button">
+              Detaylı Bilgi
+            </Link>
+          </div>
+        ))}
       </div>
     </section>
   );

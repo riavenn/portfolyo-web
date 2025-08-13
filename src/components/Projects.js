@@ -132,11 +132,13 @@ function Projects() {
       <div className="projects-grid">
         {projectsData.map((project) => (
           <div key={project.id} className="project-card">
-            <img
-              src={project.imageUrl}
-              alt={project.title}
-              className="project-image"
-            />
+            <div className="project-image-container">
+              <img
+                src={project.imageUrl}
+                alt={project.title}
+                className="project-image"
+              />
+            </div>
             <div className="project-info">
               <h3 className="project-title">{project.title}</h3>
               <a
