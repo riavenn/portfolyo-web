@@ -21,11 +21,13 @@ function FadeInSection(props) {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-    rootMargin: "0px 0px -100px 0px"
+    rootMargin: "0px 0px -100px 0px",
   });
 
   return (
-    <div ref={ref} className={`fade-in-section ${inView ? "is-visible" : ""}`}>
+    <div
+      ref={ref}
+      className={`fade-in-section ${inView ? "is-visible" : ""}`}>
       {props.children}
     </div>
   );
@@ -33,33 +35,6 @@ function FadeInSection(props) {
 
 // Ana sayfa bileşeni
 function HomePage() {
-  const [siteContent, setSiteContent] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadSiteContent = async () => {
-      try {
-        setLoading(true);
-        // localStorage'dan site içeriğini yükle
-        const savedContent = localStorage.getItem("siteContent");
-        if (savedContent) {
-          setSiteContent(JSON.parse(savedContent));
-        }
-      } catch (error) {
-        console.error("Site içeriği yüklenirken hata:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadSiteContent();
-  }, []);
-
-  // Yükleme ekranını kaldırdık, içerik hazır olana kadar bekleyeceğiz
-  if (loading) {
-    return null; // İçerik yüklenene kadar hiçbir şey gösterme
-  }
-
   return (
     <div className="App">
       <div className="video-background">
@@ -77,12 +52,12 @@ function HomePage() {
       <Navbar />
       <FadeInSection>
         <section id="header">
-          <Header siteContent={siteContent} />
+          <Header />
         </section>
       </FadeInSection>
       <FadeInSection>
         <section id="services">
-          <Services siteContent={siteContent} />
+          <Services />
         </section>
       </FadeInSection>
       <FadeInSection>
@@ -92,10 +67,10 @@ function HomePage() {
       </FadeInSection>
       <FadeInSection>
         <section id="contact">
-          <Contact siteContent={siteContent} />
+          <Contact />
         </section>
       </FadeInSection>
-      <Footer siteContent={siteContent} />
+      <Footer />
     </div>
   );
 }
@@ -182,16 +157,15 @@ function Navbar() {
   );
 }
 
-function TypeWriter({ siteContent }) {
-  const titles = React.useMemo(() => {
-    return (
-      siteContent?.header?.animatedTitles || [
-        "Web Tasarımı",
-        "Web Site Tasarımı",
-        "Web Geliştirme Hizmetleri",
-      ]
-    );
-  }, [siteContent?.header?.animatedTitles]);
+function TypeWriter() {
+  const titles = React.useMemo(
+    () => [
+      "Web Tasarımı",
+      "Web Site Tasarımı",
+      "Web Geliştirme Hizmetleri",
+    ],
+    []
+  );
   const [titleIndex, setTitleIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -231,7 +205,7 @@ function TypeWriter({ siteContent }) {
   return <span className="animated-text">{currentText}</span>;
 }
 
-function Header({ siteContent }) {
+function Header() {
   const skills = [
     { name: "HTML", icon: <FaHtml5 /> },
     { name: "CSS", icon: <FaCss3Alt /> },
@@ -240,24 +214,23 @@ function Header({ siteContent }) {
     { name: "React", icon: <FaReact /> },
   ];
 
-  // Varsayılan değerler
-  const defaultHeader = {
+  const headerData = {
     name: "Mert Saykal",
     title: "Web Tasarımı",
-    description1: "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak.",
-    description2: "En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum.",
-    description3: "Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
+    description1:
+      "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak.",
+    description2:
+      "En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum.",
+    description3:
+      "Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
     profileImage: "/avatar.jpg",
   };
 
-  const defaultSocial = {
+  const socialData = {
     linkedin: "https://www.linkedin.com/in/mert-saykal/",
     github: "https://github.com/riavenn",
     email: "mertsaykal0@gmail.com",
   };
-
-  const headerData = siteContent?.header || defaultHeader;
-  const socialData = siteContent?.social || defaultSocial;
 
   return (
     <header className="header" id="header">
@@ -296,7 +269,7 @@ function Header({ siteContent }) {
         <div className="profile-text">
           <h1>{headerData.name}</h1>
           <h2>
-            <TypeWriter siteContent={siteContent} />
+            <TypeWriter />
           </h2>
           <div className="about-me-container">
             <p className="about-me">{headerData.description1}</p>
@@ -309,35 +282,37 @@ function Header({ siteContent }) {
   );
 }
 
-function Services({ siteContent }) {
-  const defaultServices = [
+function Services() {
+  const services = [
     {
       title: "Web Geliştirme",
       image: "/web-dev.jpg",
-      description: "Modern ve performanslı web siteleri ile dijital dünyada yerinizi alın. Size özel çözümlerle markanızı en iyi şekilde temsil ediyoruz.",
+      description:
+        "Modern ve performanslı web siteleri ile dijital dünyada yerinizi alın. Size özel çözümlerle markanızı en iyi şekilde temsil ediyoruz.",
       link: "#contact",
     },
     {
       title: "UI/UX Tasarımı",
       image: "/ui-ux.jpg",
-      description: "Kullanıcı dostu ve estetik arayüzler tasarlayarak, kullanıcılarınızın web sitenizde keyifli bir deneyim yaşamasını sağlıyoruz.",
+      description:
+        "Kullanıcı dostu ve estetik arayüzler tasarlayarak, kullanıcılarınızın web sitenizde keyifli bir deneyim yaşamasını sağlıyoruz.",
       link: "#contact",
     },
     {
       title: "SEO Optimizasyonu",
       image: "/seo.jpg",
-      description: "Arama motorlarında üst sıralarda yer alarak daha fazla müşteriye ulaşın. Sitenizi SEO uyumlu hale getirerek organik trafiğinizi artırıyoruz.",
+      description:
+        "Arama motorlarında üst sıralarda yer alarak daha fazla müşteriye ulaşın. Sitenizi SEO uyumlu hale getirerek organik trafiğinizi artırıyoruz.",
       link: "#contact",
     },
     {
       title: "Sosyal Medya Yönetimi",
       image: "/social.jpg",
-      description: "Sosyal medya hesaplarınızı profesyonelce yöneterek marka bilinirliğinizi artırıyor ve hedef kitlenizle etkileşiminizi güçlendiriyoruz.",
+      description:
+        "Sosyal medya hesaplarınızı profesyonelce yöneterek marka bilinirliğinizi artırıyor ve hedef kitlenizle etkileşiminizi güçlendiriyoruz.",
       link: "#contact",
     },
   ];
-
-  const services = siteContent?.services || defaultServices;
 
   return (
     <section className="services" id="services">
@@ -369,14 +344,12 @@ function Services({ siteContent }) {
   );
 }
 
-function Footer({ siteContent }) {
-  const defaultSocial = {
+function Footer() {
+  const socialData = {
     linkedin: "https://www.linkedin.com/in/mert-saykal/",
     github: "https://github.com/riavenn",
     email: "mertsaykal0@gmail.com",
   };
-
-  const socialData = siteContent?.social || defaultSocial;
 
   return (
     <footer className="footer">
@@ -394,7 +367,10 @@ function Footer({ siteContent }) {
             rel="noopener noreferrer">
             <FaLinkedinIn />
           </a>
-          <a href={socialData.github} target="_blank" rel="noopener noreferrer">
+          <a
+            href={socialData.github}
+            target="_blank"
+            rel="noopener noreferrer">
             <FaGithub />
           </a>
           <a href={`mailto:${socialData.email}`}>
@@ -406,8 +382,7 @@ function Footer({ siteContent }) {
   );
 }
 
-function Contact({ siteContent }) {
-  // contactData şu an kullanılmıyor ama gelecekte kullanılabilir
+function Contact() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -427,34 +402,6 @@ function Contact({ siteContent }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const newSubmission = {
-      name: formData.name,
-      email: formData.email,
-      subject: formData.subject,
-      message: formData.message,
-      date: new Date().toLocaleString("tr-TR"),
-    };
-
-    try {
-      // Form verilerini localStorage'a kaydet
-      const savedContent = JSON.parse(
-        localStorage.getItem("siteContent") || "{}"
-      );
-      const updatedContent = {
-        ...savedContent,
-        contact: {
-          ...savedContent.contact,
-          formSubmissions: [
-            ...(savedContent.contact?.formSubmissions || []),
-            newSubmission,
-          ],
-        },
-      };
-      localStorage.setItem("siteContent", JSON.stringify(updatedContent));
-    } catch (error) {
-      console.error("Form verisi kaydedilirken hata:", error);
-    }
 
     const serviceID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
     const templateID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
