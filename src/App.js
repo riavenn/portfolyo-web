@@ -16,13 +16,12 @@ import emailjs from "emailjs-com";
 import { Link } from "react-scroll";
 import Projects from "./components/Projects";
 import Login from "./components/Login";
-import AdminPanel from "./components/AdminPanel";
-import ProtectedRoute from "./components/ProtectedRoute";
 
 function FadeInSection(props) {
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0.3,
+    threshold: 0.1,
+    rootMargin: "0px 0px -100px 0px"
   });
 
   return (
@@ -106,14 +105,6 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<Login />} />
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute>
-            <AdminPanel />
-          </ProtectedRoute>
-        }
-      />
     </Routes>
   );
 }
@@ -293,6 +284,14 @@ function Header({ siteContent }) {
               <FaEnvelope />
             </a>
           </div>
+          <div className="header-skills">
+            {skills.map((skill, index) => (
+              <div key={index} className="header-skill-item">
+                <span className="skill-icon">{skill.icon}</span>
+                <span className="skill-name">{skill.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="profile-text">
           <h1>{headerData.name}</h1>
@@ -303,14 +302,6 @@ function Header({ siteContent }) {
             <p className="about-me">{headerData.description1}</p>
             <p className="about-me">{headerData.description2}</p>
             <p className="about-me">{headerData.description3}</p>
-          </div>
-          <div className="header-skills">
-            {skills.map((skill, index) => (
-              <div key={index} className="header-skill-item">
-                <span className="skill-icon">{skill.icon}</span>
-                <span className="skill-name">{skill.name}</span>
-              </div>
-            ))}
           </div>
         </div>
       </div>
