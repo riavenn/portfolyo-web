@@ -18,7 +18,6 @@ import Projects from "./components/Projects";
 import Login from "./components/Login";
 import AdminPanel from "./components/AdminPanel";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { supabaseService } from "./lib/supabase";
 
 function FadeInSection(props) {
   const [ref, inView] = useInView({
@@ -42,45 +41,19 @@ function HomePage() {
     const loadSiteContent = async () => {
       try {
         setLoading(true);
-
-        // Önce Supabase'den site içeriğini yüklemeye çalış
-        const supabaseContent = await supabaseService.getSiteContent();
-
-        if (supabaseContent) {
-          setSiteContent(supabaseContent);
-        } else {
-          // Supabase'de veri yoksa localStorage'dan yükle
-          const savedContent = localStorage.getItem("siteContent");
-          if (savedContent) {
-            setSiteContent(JSON.parse(savedContent));
-          }
-        }
-      } catch (error) {
-        console.error("Supabase'den site içeriği yüklenirken hata:", error);
-        // Hata durumunda localStorage'a geri dön
+        // localStorage'dan site içeriğini yükle
         const savedContent = localStorage.getItem("siteContent");
         if (savedContent) {
           setSiteContent(JSON.parse(savedContent));
         }
+      } catch (error) {
+        console.error("Site içeriği yüklenirken hata:", error);
       } finally {
         setLoading(false);
       }
     };
 
     loadSiteContent();
-
-    // Real-time subscription for site content updates
-    const subscription = supabaseService.subscribeToSiteContent((payload) => {
-      console.log("Site content updated:", payload);
-      if (payload.new && payload.new.content) {
-        setSiteContent(payload.new.content);
-      }
-    });
-
-    // Cleanup subscription on unmount
-    return () => {
-      supabaseService.unsubscribe(subscription);
-    };
   }, []);
 
   // Yükleme ekranını kaldırdık, içerik hazır olana kadar bekleyeceğiz
@@ -473,25 +446,7 @@ function Contact({ siteContent }) {
     };
 
     try {
-      // Form verilerini Supabase'e kaydet
-      await supabaseService.saveFormSubmission(newSubmission);
-
-      // Aynı zamanda mevcut site içeriğini güncelle
-      const currentContent = await supabaseService.getSiteContent();
-      const updatedContent = {
-        ...currentContent,
-        contact: {
-          ...currentContent?.contact,
-          formSubmissions: [
-            ...(currentContent?.contact?.formSubmissions || []),
-            newSubmission,
-          ],
-        },
-      };
-      await supabaseService.saveSiteContent(updatedContent);
-    } catch (error) {
-      console.error("Form verisi Supabase'e kaydedilirken hata:", error);
-      // Hata durumunda localStorage'a kaydet
+      // Form verilerini localStorage'a kaydet
       const savedContent = JSON.parse(
         localStorage.getItem("siteContent") || "{}"
       );
@@ -506,6 +461,8 @@ function Contact({ siteContent }) {
         },
       };
       localStorage.setItem("siteContent", JSON.stringify(updatedContent));
+    } catch (error) {
+      console.error("Form verisi kaydedilirken hata:", error);
     }
 
     const serviceID = process.env.REACT_APP_EMAILJS_SERVICE_ID;

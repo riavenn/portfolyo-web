@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Projects.css";
-import { supabaseService } from "../lib/supabase";
 
 const defaultProjectsData = [
   {
@@ -49,70 +48,31 @@ function Projects() {
     const loadProjects = async () => {
       try {
         setLoading(true);
-        // Önce Supabase'den projeleri yüklemeye çalış
-        const supabaseProjects = await supabaseService.getProjects();
-
-        if (supabaseProjects && supabaseProjects.length > 0) {
-          // Convert Supabase format to component format
-          const formattedProjects = supabaseProjects.map(project => ({
-            id: project.project_id,
-            title: project.title,
-            imageUrl: project.image_url,
-            demoUrl: project.demo_url
-          }));
-          setProjectsData(formattedProjects);
-        } else {
-          // Supabase'de veri yoksa localStorage'dan yükle
-          const savedProjects = localStorage.getItem("adminProjects");
-          if (savedProjects) {
-            try {
-              const parsedProjects = JSON.parse(savedProjects);
-              setProjectsData(parsedProjects);
-            } catch (error) {
-              console.error(
-                "localStorage'dan projeler yüklenirken hata:",
-                error
-              );
-              setProjectsData(defaultProjectsData);
-            }
-          }
-        }
-      } catch (error) {
-        console.error("Supabase'den projeler yüklenirken hata:", error);
-        // Hata durumunda localStorage'a geri dön
+        // localStorage'dan projeleri yükle
         const savedProjects = localStorage.getItem("adminProjects");
         if (savedProjects) {
           try {
             const parsedProjects = JSON.parse(savedProjects);
             setProjectsData(parsedProjects);
-          } catch (localError) {
+          } catch (error) {
             console.error(
               "localStorage'dan projeler yüklenirken hata:",
-              localError
+              error
             );
             setProjectsData(defaultProjectsData);
           }
         } else {
           setProjectsData(defaultProjectsData);
         }
+      } catch (error) {
+        console.error("Projeler yüklenirken hata:", error);
+        setProjectsData(defaultProjectsData);
       } finally {
         setLoading(false);
       }
     };
 
     loadProjects();
-
-    // Real-time subscription for projects updates
-    const subscription = supabaseService.subscribeToProjects((payload) => {
-      console.log('Projects updated:', payload);
-      // Reload projects when there's a change
-      loadProjects();
-    });
-
-    // Cleanup subscription on unmount
-    return () => {
-      supabaseService.unsubscribe(subscription);
-    };
   }, []);
 
   if (loading) {
