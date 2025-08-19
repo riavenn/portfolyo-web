@@ -127,8 +127,8 @@ function Projects() {
   }
 
   return (
-    <div className="projects-container">
-      <h2 className="projects-title">Projelerim</h2>
+    <section id="projects" className="projects-container">
+      <h2 className="section-title">Projelerim</h2>
       <div className="projects-grid">
         {projectsData.map((project) => (
           <div key={project.id} className="project-card">
@@ -152,7 +152,7 @@ function Projects() {
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 

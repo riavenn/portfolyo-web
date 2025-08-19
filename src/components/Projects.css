@@ -3,11 +3,7 @@
   text-align: center;
 }
 
-.projects-title {
-  margin-bottom: 3rem;
-  color: #fff;
-  font-size: 2rem;
-}
+/* Projects bileşeni için h2 etiketi artık App.css'deki .section-title sınıfını kullanıyor */
 
 .projects-grid {
   display: grid;
@@ -47,25 +43,39 @@
 }
 
 .project-info {
-  padding: 1.5rem;
+  padding: 1.5rem 1.5rem 2rem;
   text-align: left;
 }
 
 .project-title {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   margin-bottom: 1rem;
   font-weight: 600;
   color: #fff;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.project-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background-color: #007bff;
 }
 
 .project-demo-link {
   display: inline-block;
-  padding: 0.6rem 1.2rem;
+  padding: 0.8rem 1.5rem;
   background-color: #00aaff;
   color: #fff;
   text-decoration: none;
   border-radius: 8px;
   transition: background-color 0.3s ease;
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
 .project-demo-link:hover {

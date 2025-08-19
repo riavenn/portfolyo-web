@@ -3,11 +3,7 @@
   padding: 50px 20px;
 }
 
-.services h2 {
-  font-size: 2rem;
-  margin-bottom: 40px;
-  color: #fff;
-}
+/* Services bileşeni için h2 etiketi artık App.css'deki .section-title sınıfını kullanıyor */
 
 .services-grid {
   display: grid;
@@ -54,13 +50,28 @@
 }
 
 .service-card h3 {
-  font-size: 1.2rem;
-  margin: 20px 0 10px 0;
+  font-size: 1.5rem;
+  margin: 20px 0 15px 0;
   color: #fff;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.service-card h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 2px;
+  background-color: #007bff;
 }
 
 .service-card p {
-  font-size: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
   margin: 0 20px 20px 20px;
   color: #ddd;
   flex-grow: 1;

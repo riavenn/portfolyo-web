@@ -95,6 +95,40 @@
   }
 }
 
+/* Contact Form Styles - SEO Optimization */
+.contact-form input,
+.contact-form textarea {
+  font-size: 1.1rem;
+  padding: 12px 15px;
+}
+
+.contact-form button {
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 12px 30px;
+}
+
+/* Section Title Styles */
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #fff;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background-color: #007bff;
+}
+
 /* Supabase Status Styles */
 .supabase-status {
   margin-top: 20px;
@@ -147,6 +181,30 @@
   font-size: 1.8rem;
   margin-bottom: 1rem;
   color: #333;
+}
+
+/* Header Styles - SEO Optimization */
+.profile-text h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.profile-text h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #61dafb;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.about-me-container .about-me {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 15px;
+  color: #f0f0f0;
 }
 
 .admin-loading p {

@@ -377,7 +377,7 @@ function Services({ siteContent }) {
 
   return (
     <section className="services" id="services">
-      <h2>Hizmetler</h2>
+      <h2 className="section-title">Hizmetler</h2>
       <div className="services-grid">
         {services.map((service, index) => (
           <div key={index} className="service-card">
@@ -542,7 +542,7 @@ function Contact({ siteContent }) {
     <section id="contact" className="contact">
       <div className="contact-container">
         <div className="contact-title">
-          <h2>İLETİŞİM</h2>
+          <h2 className="section-title">İLETİŞİM</h2>
         </div>
         <form ref={form} onSubmit={handleSubmit} className="contact-form">
           <div className="form-group">
