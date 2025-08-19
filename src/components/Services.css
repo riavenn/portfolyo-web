@@ -65,7 +65,7 @@
   transform: translateX(-50%);
   width: 30px;
   height: 2px;
-  background-color: #007bff;
+  background-color: #61dafb;
 }
 
 .service-card p {
@@ -81,7 +81,7 @@
   display: inline-block;
   padding: 8px 16px;
   margin: 0 25px 15px 25px;
-  background-color: #007bff;
+  background-color: #61dafb;
   color: #fff;
   text-decoration: none;
   border-radius: 5px;

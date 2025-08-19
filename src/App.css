@@ -110,7 +110,7 @@
 
 /* Section Title Styles */
 .section-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   margin-bottom: 40px;
   color: #fff;
@@ -126,7 +126,7 @@
   transform: translateX(-50%);
   width: 50px;
   height: 3px;
-  background-color: #007bff;
+  background-color: #61dafb;
 }
 
 /* Supabase Status Styles */
@@ -380,7 +380,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 2rem;
+  padding: 2rem;
   position: relative;
   overflow: hidden;
 }
@@ -521,9 +521,9 @@ body {
   position: relative;
   z-index: 1;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 5rem;
+  gap: 4rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -575,7 +575,7 @@ body {
   flex-wrap: nowrap;
   gap: 1rem;
   margin-top: 2rem;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
 }
 
@@ -709,9 +709,9 @@ body {
   display: block;
   background: linear-gradient(
     135deg,
-    rgba(15, 32, 39, 0.92),
-    rgba(32, 58, 67, 0.92),
-    rgba(44, 83, 100, 0.92)
+    rgba(213, 231, 239, 0.92),
+    rgba(125, 205, 231, 0.92),
+    rgba(213, 231, 239, 0.92)
   );
   color: #fff;
   text-decoration: none;
@@ -736,8 +736,6 @@ body {
 }
 
 .contact {
-  padding: 4rem 2rem;
-  min-height: 100vh;
   display: flex;
   align-items: center;
 }

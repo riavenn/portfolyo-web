@@ -257,14 +257,6 @@ function Header() {
               <FaEnvelope />
             </a>
           </div>
-          <div className="header-skills">
-            {skills.map((skill, index) => (
-              <div key={index} className="header-skill-item">
-                <span className="skill-icon">{skill.icon}</span>
-                <span className="skill-name">{skill.name}</span>
-              </div>
-            ))}
-          </div>
         </div>
         <div className="profile-text">
           <h1>{headerData.name}</h1>
@@ -275,6 +267,14 @@ function Header() {
             <p className="about-me">{headerData.description1}</p>
             <p className="about-me">{headerData.description2}</p>
             <p className="about-me">{headerData.description3}</p>
+          </div>
+          <div className="header-skills">
+            {skills.map((skill, index) => (
+              <div key={index} className="header-skill-item">
+                <span className="skill-icon">{skill.icon}</span>
+                <span className="skill-name">{skill.name}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
