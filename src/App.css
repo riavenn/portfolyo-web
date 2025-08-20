@@ -1382,6 +1382,10 @@ button[type="submit"]:hover {
   .contact-container {
     flex-direction: column;
   }
+
+  .header {
+    padding-top: 6rem;
+  }
 }
 
 section {
