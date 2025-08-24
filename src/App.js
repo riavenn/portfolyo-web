@@ -321,8 +321,9 @@ function Header() {
             ))}
           </div>
           <a
-            href={process.env.PUBLIC_URL + "/resume.pdf"}
-            download="Mert_Saykal_CV.pdf"
+            href="https://drive.google.com/file/d/1WWWkHsUAokSnYvjwGFAeqp2-Adj0YCYn/view?usp=drive_link"
+            target="_blank"
+            rel="noopener noreferrer"
             className="resume-button">
             <FaDownload className="download-icon" />
             Özgeçmiş İndir

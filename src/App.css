@@ -710,6 +710,8 @@ body {
   opacity: 0;
   transform: translateX(-50px);
   animation: slideInFromLeft 0.8s ease-out 0.2s forwards;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Profile name and title styles (moved below image) */
@@ -753,29 +755,30 @@ body {
   height: 300px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #65a3d5;
+  border: 3px solid #b8d9ea;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   margin-bottom: 1rem;
   transition: all 0.3s ease;
-  cursor: pointer;
   animation: glowPulse 4s ease-in-out infinite;
+  outline: none;
+  user-select: none;
 }
 
 /* Pulsing glow animation */
 @keyframes glowPulse {
   0%,
   100% {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 rgba(101, 163, 213, 0);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 0 rgba(184, 217, 234, 0);
   }
   50% {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 20px rgba(101, 163, 213, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 20px rgba(184, 217, 234, 0.3);
   }
 }
 
 .profile-image img:hover {
   transform: scale(1.05);
-  border-color: #415a77;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(101, 163, 213, 0.3);
+  border-color: #6fb3d1;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(184, 217, 234, 0.3);
   animation-play-state: paused;
 }
 
