@@ -1,6 +1,9 @@
 .projects-container {
   padding: 4rem 2rem;
   text-align: center;
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(45deg, rgba(38, 102, 127, 0.4) 0%, rgba(74, 141, 168, 0.3) 35%, rgba(111, 179, 209, 0.2) 50%, rgba(74, 141, 168, 0.3) 65%, rgba(38, 102, 127, 0.4) 100%);
 }
 
 /* Projects bileşeni için h2 etiketi artık App.css'deki .section-title sınıfını kullanıyor */
@@ -14,18 +17,25 @@
 }
 
 .project-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
   border-radius: 15px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 .project-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 30px rgba(184, 217, 234, 0.2);
+  border-color: rgba(184, 217, 234, 0.4);
 }
 
 .project-image-container {
@@ -63,13 +73,13 @@
   left: 0;
   width: 30px;
   height: 2px;
-  background-color: #61dafb;
+  background-color: #B8D9EA;
 }
 
 .project-demo-link {
   display: inline-block;
   padding: 0.6rem 1.2rem;
-  background-color: #00aaff;
+  background-color: #6FB3D1;
   color: #fff;
   text-decoration: none;
   border-radius: 8px;
@@ -79,7 +89,7 @@
 }
 
 .project-demo-link:hover {
-  background-color: #0088cc;
+  background-color: #4A8DA8;
 }
 
 @media (max-width: 768px) {

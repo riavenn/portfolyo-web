@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import "./App.css";
@@ -10,12 +10,67 @@ import {
   FaLinkedinIn,
   FaEnvelope,
   FaGithub,
+  FaDownload,
 } from "react-icons/fa6";
 import { SiJavascript, SiTypescript } from "react-icons/si";
-import emailjs from "emailjs-com";
 import { Link } from "react-scroll";
 import Projects from "./components/Projects";
 import Login from "./components/Login";
+
+// Mouse Cursor Flashlight Component
+function CursorFlashlight() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isActive, setIsActive] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+      if (!isActive) setIsActive(true);
+    };
+
+    const handleMouseEnter = () => setIsHovering(true);
+    const handleMouseLeave = () => setIsHovering(false);
+    
+    const handleMouseLeaveWindow = () => setIsActive(false);
+    const handleMouseEnterWindow = () => setIsActive(true);
+
+    // Add event listeners for mouse movement
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeaveWindow);
+    document.addEventListener('mouseenter', handleMouseEnterWindow);
+    
+    // Add hover effects for interactive elements
+    const interactiveElements = document.querySelectorAll(
+      'a, button, .service-card, .project-card, .header-skill-item, .resume-button, .contact-email, .nav-links a, .social-links a, .contact-social-icons a'
+    );
+    
+    interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', handleMouseEnter);
+      el.addEventListener('mouseleave', handleMouseLeave);
+    });
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeaveWindow);
+      document.removeEventListener('mouseenter', handleMouseEnterWindow);
+      interactiveElements.forEach(el => {
+        el.removeEventListener('mouseenter', handleMouseEnter);
+        el.removeEventListener('mouseleave', handleMouseLeave);
+      });
+    };
+  }, [isActive]);
+
+  return (
+    <div
+      className={`cursor-flashlight ${isActive ? 'active' : ''} ${isHovering ? 'hover' : ''}`}
+      style={{
+        left: position.x,
+        top: position.y,
+      }}
+    />
+  );
+}
 
 function FadeInSection(props) {
   const [ref, inView] = useInView({
@@ -37,18 +92,7 @@ function FadeInSection(props) {
 function HomePage() {
   return (
     <div className="App">
-      <div className="video-background">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster={process.env.PUBLIC_URL + "/avatar.png"}>
-          <source src={"/header-bg.mp4"} type="video/mp4" />
-          <track kind="captions" srcLang="tr" label="Türkçe Altyazı" />{" "}
-          <track kind="descriptions" srcLang="tr" label="Türkçe Açıklamalar" />{" "}
-        </video>
-      </div>
+      <CursorFlashlight />
       <Navbar />
       <FadeInSection>
         <section id="header">
@@ -240,6 +284,10 @@ function Header() {
             src={process.env.PUBLIC_URL + headerData.profileImage}
             alt="Profil"
           />
+          <h1 className="profile-name">{headerData.name}</h1>
+          <h2 className="profile-title">
+            <TypeWriter />
+          </h2>
           <div className="social-links">
             <a
               href={socialData.linkedin}
@@ -259,10 +307,6 @@ function Header() {
           </div>
         </div>
         <div className="profile-text">
-          <h1>{headerData.name}</h1>
-          <h2>
-            <TypeWriter />
-          </h2>
           <div className="about-me-container">
             <p className="about-me">{headerData.description1}</p>
             <p className="about-me">{headerData.description2}</p>
@@ -276,6 +320,13 @@ function Header() {
               </div>
             ))}
           </div>
+          <a
+            href={process.env.PUBLIC_URL + "/resume.pdf"}
+            download="Mert_Saykal_CV.pdf"
+            className="resume-button">
+            <FaDownload className="download-icon" />
+            Özgeçmiş İndir
+          </a>
         </div>
       </div>
     </header>
@@ -383,54 +434,10 @@ function Footer() {
 }
 
 function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const form = useRef();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const serviceID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
-    const templateID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
-    const userID = process.env.REACT_APP_EMAILJS_USER_ID;
-
-    if (!serviceID || !templateID || !userID) {
-      alert(
-        "EmailJS ayarları eksik. Lütfen .env dosyasını kontrol edin ve gerekli SERVICE_ID, TEMPLATE_ID ve USER_ID değerlerini ekleyin."
-      );
-      console.error("EmailJS environment variables are not set.");
-      return;
-    }
-
-    emailjs.sendForm(serviceID, templateID, form.current, userID).then(
-      (result) => {
-        console.log(result.text);
-        alert("Mesajınız başarıyla gönderildi!");
-        setFormData({
-          name: "",
-          email: "",
-          subject: "",
-          message: "",
-        });
-      },
-      (error) => {
-        console.log(error.text);
-        alert("Mesaj gönderilirken bir hata oluştu: " + error.text);
-      }
-    );
+  const socialData = {
+    linkedin: "https://www.linkedin.com/in/mert-saykal/",
+    github: "https://github.com/riavenn",
+    email: "mertsaykal0@gmail.com",
   };
 
   return (
@@ -438,48 +445,42 @@ function Contact() {
       <div className="contact-container">
         <div className="contact-title">
           <h2 className="section-title">İLETİŞİM</h2>
+          <p className="contact-subtitle">
+            Projelerinizi hayata geçirmek, benimle çalışmak ister misiniz?
+          </p>
         </div>
-        <form ref={form} onSubmit={handleSubmit} className="contact-form">
-          <div className="form-group">
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Adınız"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="E-posta Adresiniz"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="text"
-              name="subject"
-              value={formData.subject}
-              onChange={handleChange}
-              placeholder="Konu"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="Mesajınız"
-              required></textarea>
-          </div>
-          <button type="submit">Gönder</button>
-        </form>
+        
+        <a 
+          href={`mailto:${socialData.email}`} 
+          className="contact-email"
+        >
+          {socialData.email}
+        </a>
+        
+        <div className="contact-social-icons">
+          <a
+            href={socialData.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="LinkedIn"
+          >
+            <FaLinkedinIn />
+          </a>
+          <a
+            href={socialData.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="GitHub"
+          >
+            <FaGithub />
+          </a>
+          <a 
+            href={`mailto:${socialData.email}`}
+            title="Email"
+          >
+            <FaEnvelope />
+          </a>
+        </div>
       </div>
     </section>
   );
