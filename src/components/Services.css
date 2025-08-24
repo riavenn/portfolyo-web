@@ -3,7 +3,7 @@
   min-height: 100vh;
   padding: 4rem 2rem;
   position: relative;
-  background: linear-gradient(45deg, rgba(38, 102, 127, 0.4) 0%, rgba(74, 141, 168, 0.3) 35%, rgba(111, 179, 209, 0.2) 50%, rgba(74, 141, 168, 0.3) 65%, rgba(38, 102, 127, 0.4) 100%);
+  background: linear-gradient(45deg, rgba(13, 27, 42, 0.4) 0%, rgba(27, 38, 59, 0.3) 35%, rgba(65, 90, 119, 0.2) 50%, rgba(27, 38, 59, 0.3) 65%, rgba(13, 27, 42, 0.4) 100%);
 }
 
 /* Services bileşeni için h2 etiketi artık App.css'deki .section-title sınıfını kullanıyor */
@@ -40,8 +40,8 @@
 
 .service-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(97, 218, 251, 0.15);
-  border-color: rgba(97, 218, 251, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(101, 163, 213, 0.2);
+  border-color: rgba(101, 163, 213, 0.4);
 }
 
 .service-image-container {
@@ -76,7 +76,7 @@
   transform: translateX(-50%);
   width: 30px;
   height: 2px;
-  background-color: #B8D9EA;
+  background-color: #65a3d5;
 }
 
 .service-card p {
@@ -92,20 +92,20 @@
   display: inline-block;
   padding: 8px 16px;
   margin: 0 25px 15px 25px;
-  background: linear-gradient(135deg, #B8D9EA 0%, #6FB3D1 100%);
+  background: linear-gradient(135deg, #65a3d5 0%, #415a77 100%);
   color: #fff;
   text-decoration: none;
   border-radius: 8px;
   transition: all 0.3s ease;
   font-size: 0.9rem;
   font-weight: 600;
-  box-shadow: 0 4px 15px rgba(97, 218, 251, 0.3);
+  box-shadow: 0 4px 15px rgba(101, 163, 213, 0.3);
 }
 
 .service-button:hover {
-  background: linear-gradient(135deg, #6FB3D1 0%, #B8D9EA 100%);
+  background: linear-gradient(135deg, #415a77 0%, #65a3d5 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(97, 218, 251, 0.4);
+  box-shadow: 0 8px 25px rgba(101, 163, 213, 0.4);
 }
 
 @media (max-width: 1024px) {

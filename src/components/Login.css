@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background: linear-gradient(45deg, rgba(38, 102, 127, 0.4) 0%, rgba(74, 141, 168, 0.3) 35%, rgba(111, 179, 209, 0.2) 50%, rgba(74, 141, 168, 0.3) 65%, rgba(38, 102, 127, 0.4) 100%);
+  background: linear-gradient(45deg, rgba(13, 27, 42, 0.4) 0%, rgba(27, 38, 59, 0.3) 35%, rgba(65, 90, 119, 0.2) 50%, rgba(27, 38, 59, 0.3) 65%, rgba(13, 27, 42, 0.4) 100%);
   background-attachment: fixed;
 }
 
@@ -14,7 +14,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, rgba(38, 102, 127, 0.4) 0%, rgba(74, 141, 168, 0.3) 35%, rgba(111, 179, 209, 0.2) 50%, rgba(74, 141, 168, 0.3) 65%, rgba(38, 102, 127, 0.4) 100%);
+  background: linear-gradient(45deg, rgba(13, 27, 42, 0.4) 0%, rgba(27, 38, 59, 0.3) 35%, rgba(65, 90, 119, 0.2) 50%, rgba(27, 38, 59, 0.3) 65%, rgba(13, 27, 42, 0.4) 100%);
   z-index: 1;
 }
 
@@ -71,7 +71,7 @@
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 10px;
-  background: linear-gradient(135deg, #26667F 0%, #4A8DA8 50%, #B8D9EA 100%);
+  background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #65a3d5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -112,8 +112,8 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #B8D9EA;
-  box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.2);
+  border-color: #65a3d5;
+  box-shadow: 0 0 0 3px rgba(101, 163, 213, 0.2);
   background: white;
 }
 
@@ -132,7 +132,7 @@
 }
 
 .login-button {
-  background: linear-gradient(135deg, #4A8DA8 0%, #B8D9EA 50%, #26667F 100%);
+  background: linear-gradient(135deg, #1b263b 0%, #65a3d5 50%, #0d1b2a 100%);
   color: white;
   border: none;
   padding: 14px 20px;
@@ -146,7 +146,7 @@
 
 .login-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(184, 217, 234, 0.4);
+  box-shadow: 0 10px 20px rgba(101, 163, 213, 0.4);
 }
 
 .login-button:active {
@@ -179,7 +179,7 @@
 }
 
 .login-footer strong {
-  color: #6FB3D1;
+  color: #415a77;
 }
 
 /* Responsive Design */

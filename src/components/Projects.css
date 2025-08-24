@@ -3,7 +3,7 @@
   text-align: center;
   min-height: 100vh;
   position: relative;
-  background: linear-gradient(45deg, rgba(38, 102, 127, 0.4) 0%, rgba(74, 141, 168, 0.3) 35%, rgba(111, 179, 209, 0.2) 50%, rgba(74, 141, 168, 0.3) 65%, rgba(38, 102, 127, 0.4) 100%);
+  background: linear-gradient(45deg, rgba(13, 27, 42, 0.4) 0%, rgba(27, 38, 59, 0.3) 35%, rgba(65, 90, 119, 0.2) 50%, rgba(27, 38, 59, 0.3) 65%, rgba(13, 27, 42, 0.4) 100%);
 }
 
 /* Projects bileşeni için h2 etiketi artık App.css'deki .section-title sınıfını kullanıyor */
@@ -34,8 +34,8 @@
 
 .project-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 30px rgba(184, 217, 234, 0.2);
-  border-color: rgba(184, 217, 234, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 0 30px rgba(101, 163, 213, 0.2);
+  border-color: rgba(101, 163, 213, 0.4);
 }
 
 .project-image-container {
@@ -73,13 +73,13 @@
   left: 0;
   width: 30px;
   height: 2px;
-  background-color: #B8D9EA;
+  background-color: #65a3d5;
 }
 
 .project-demo-link {
   display: inline-block;
   padding: 0.6rem 1.2rem;
-  background-color: #6FB3D1;
+  background-color: #65a3d5;
   color: #fff;
   text-decoration: none;
   border-radius: 8px;
@@ -89,7 +89,7 @@
 }
 
 .project-demo-link:hover {
-  background-color: #4A8DA8;
+  background-color: #415a77;
 }
 
 @media (max-width: 768px) {
