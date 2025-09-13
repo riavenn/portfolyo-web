@@ -17,61 +17,6 @@ import { Link } from "react-scroll";
 import Projects from "./components/Projects";
 import Login from "./components/Login";
 
-// Mouse Cursor Flashlight Component
-function CursorFlashlight() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isActive, setIsActive] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-      if (!isActive) setIsActive(true);
-    };
-
-    const handleMouseEnter = () => setIsHovering(true);
-    const handleMouseLeave = () => setIsHovering(false);
-    
-    const handleMouseLeaveWindow = () => setIsActive(false);
-    const handleMouseEnterWindow = () => setIsActive(true);
-
-    // Add event listeners for mouse movement
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeaveWindow);
-    document.addEventListener('mouseenter', handleMouseEnterWindow);
-    
-    // Add hover effects for interactive elements
-    const interactiveElements = document.querySelectorAll(
-      'a, button, .service-card, .project-card, .header-skill-item, .resume-button, .contact-email, .nav-links a, .social-links a, .contact-social-icons a'
-    );
-    
-    interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
-    });
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseleave', handleMouseLeaveWindow);
-      document.removeEventListener('mouseenter', handleMouseEnterWindow);
-      interactiveElements.forEach(el => {
-        el.removeEventListener('mouseenter', handleMouseEnter);
-        el.removeEventListener('mouseleave', handleMouseLeave);
-      });
-    };
-  }, [isActive]);
-
-  return (
-    <div
-      className={`cursor-flashlight ${isActive ? 'active' : ''} ${isHovering ? 'hover' : ''}`}
-      style={{
-        left: position.x,
-        top: position.y,
-      }}
-    />
-  );
-}
-
 function FadeInSection(props) {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -92,7 +37,6 @@ function FadeInSection(props) {
 function HomePage() {
   return (
     <div className="App">
-      <CursorFlashlight />
       <Navbar />
       <FadeInSection>
         <section id="header">
