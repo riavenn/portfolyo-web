@@ -207,6 +207,7 @@
   line-height: 1.7;
   margin-bottom: 15px;
   color: #f0f0f0;
+  text-align: left;
 }
 
 .admin-loading p {
@@ -696,6 +697,61 @@ body {
   transform: translateX(50px);
   animation: slideInFromRight 0.8s ease-out 0.4s forwards;
   margin-top: 2rem;
+}
+
+.profile-text .profile-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInFade 0.8s ease-out 0.5s forwards;
+}
+
+.profile-text .profile-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #65a3d5;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInFade 0.8s ease-out 0.7s forwards;
+}
+
+.profile-text .header-text-content {
+  margin-bottom: 1.5rem;
+  max-width: 100%;
+  display: block;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease-out 0.6s forwards;
+}
+
+.profile-text .about-me-container {
+  margin-bottom: 1.5rem;
+  max-width: 100%;
+  display: block;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease-out 0.6s forwards;
+}
+
+.profile-text .header-text-content {
+  margin-left: 0;
+  padding-left: 0;
+  width: 100%;
+}
+
+.profile-text .profile-name,
+.profile-text .profile-title {
+  margin-left: 0;
+  text-align: left;
+  width: 100%;
+  padding-left: 0;
+  margin-right: 0;
 }
 
 /* Profile text animation */

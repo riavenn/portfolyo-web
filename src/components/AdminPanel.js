@@ -45,11 +45,9 @@ const AdminPanel = () => {
         "Web Geliştirme Hizmetleri",
       ],
       description1:
-        "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak.",
-      description2:
-        "En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum.",
-      description3:
-        "Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
+        "Modern, şık ve kullanıcı dostu web siteleri tasarlayan ve geliştiren bir front-end developer. Yenilikçi teknolojilerle markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek çözümler sunuyorum.",
+      description2: "",
+      description3: "",
       profileImage: "/avatar.jpg",
       skills: [
         { name: "HTML", icon: "FaHtml5" },

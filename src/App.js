@@ -206,11 +206,9 @@ function Header() {
     name: "Mert Saykal",
     title: "Web Tasarımı",
     description1:
-      "Modern, şık ve kullanımı kolay web siteleri tasarlayan ve geliştiren bir front-end developer olarak, amacım her projede müşteri memnuniyetini en üst düzeyde tutmak ve olabildiğince başarılı işlere imza atmak.",
-    description2:
-      "En son yenilikçi teknolojileri kullanarak, işletmenizin veya projenizin ruhunu yansıtan, hem göze hitap eden hem de kullanıcı dostu web deneyimleri yaratıyorum. Sadece bir web sitesi değil, markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek bir platform inşa ediyorum.",
-    description3:
-      "Gelin, dijital varlığınızı bir üst seviyeye taşıyacak, hayal ettiğiniz web sitesini birlikte tasarlayalım ve geliştirelim!",
+      "Modern, şık ve kullanıcı dostu web siteleri tasarlayan ve geliştiren bir front-end developer. Yenilikçi teknolojilerle markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek çözümler sunuyorum.",
+    description2: "",
+    description3: "",
     profileImage: "/avatar.jpg",
   };
 
@@ -228,10 +226,6 @@ function Header() {
             src={process.env.PUBLIC_URL + headerData.profileImage}
             alt="Profil"
           />
-          <h1 className="profile-name">{headerData.name}</h1>
-          <h2 className="profile-title">
-            <TypeWriter />
-          </h2>
           <div className="social-links">
             <a
               href={socialData.linkedin}
@@ -251,10 +245,16 @@ function Header() {
           </div>
         </div>
         <div className="profile-text">
-          <div className="about-me-container">
-            <p className="about-me">{headerData.description1}</p>
-            <p className="about-me">{headerData.description2}</p>
-            <p className="about-me">{headerData.description3}</p>
+          <div className="header-text-content">
+            <h1 className="profile-name">{headerData.name}</h1>
+            <h2 className="profile-title">
+              <TypeWriter />
+            </h2>
+            <div className="about-me-container">
+              <p className="about-me">{headerData.description1}</p>
+              <p className="about-me">{headerData.description2}</p>
+              <p className="about-me">{headerData.description3}</p>
+            </div>
           </div>
           <div className="header-skills">
             {skills.map((skill, index) => (
@@ -394,14 +394,14 @@ function Contact() {
             Projelerinizi hayata geçirmek, benimle çalışmak ister misiniz?
           </p>
         </div>
-        
-        <a 
-          href={`mailto:${socialData.email}`} 
+
+        <a
+          href={`mailto:${socialData.email}`}
           className="contact-email"
         >
           {socialData.email}
         </a>
-        
+
         <div className="contact-social-icons">
           <a
             href={socialData.linkedin}
@@ -419,7 +419,7 @@ function Contact() {
           >
             <FaGithub />
           </a>
-          <a 
+          <a
             href={`mailto:${socialData.email}`}
             title="Email"
           >
