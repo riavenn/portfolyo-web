@@ -1167,8 +1167,8 @@ body {
   }
 
   .contact-email {
-    font-size: 1.2rem;
-    padding: 0.8rem 1.5rem;
+    font-size: 1rem; /* Smaller font size for mobile */
+    padding: 0.6rem 1.2rem; /* Reduced padding for mobile */
   }
 
   .contact-social-icons {
