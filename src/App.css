@@ -788,6 +788,9 @@ body {
     max-width: 100%;
     padding: 0 1rem;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     /* Keep the same animation for mobile */
     opacity: 0;
     transform: translateX(50px);
@@ -809,10 +812,14 @@ body {
   .profile-name {
     font-size: 1.5rem;
     letter-spacing: 1px;
+    text-align: center;
+    width: 100%;
   }
 
   .profile-title {
     font-size: 1.1rem;
+    text-align: center;
+    width: 100%;
   }
 
   /* Mobile styles for resume button */
