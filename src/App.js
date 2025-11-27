@@ -15,7 +15,6 @@ import {
 import { SiJavascript, SiTypescript } from "react-icons/si";
 import { Link } from "react-scroll";
 import Projects from "./components/Projects";
-import Login from "./components/Login";
 
 function FadeInSection(props) {
   const [ref, inView] = useInView({
@@ -67,7 +66,6 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<Login />} />
     </Routes>
   );
 }
@@ -115,7 +113,7 @@ function Navbar() {
           offset={-70}
           duration={0}
           onClick={handleNavClick}>
-          Hizmetler
+          Neler yapıyorum ?
         </Link>
         <Link
           to="projects"
@@ -148,9 +146,10 @@ function Navbar() {
 function TypeWriter() {
   const titles = React.useMemo(
     () => [
-      "Web Tasarımı",
-      "Web Site Tasarımı",
-      "Web Geliştirme Hizmetleri",
+      "Front-End Geliştirici",
+      "React Geliştirici",
+      "JavaScript Geliştirici",
+      "TypeScript Geliştirici",
     ],
     []
   );
@@ -158,8 +157,8 @@ function TypeWriter() {
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
-  const typingSpeed = 150;
-  const deletingSpeed = 100;
+  const typingSpeed = 75;
+  const deletingSpeed = 75;
   const delaySpeed = 1500;
 
   useEffect(() => {
@@ -206,7 +205,7 @@ function Header() {
     name: "Mert Saykal",
     title: "Web Tasarımı",
     description1:
-      "Modern, şık ve kullanıcı dostu web siteleri tasarlayan ve geliştiren bir front-end developer. Yenilikçi teknolojilerle markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek çözümler sunuyorum.",
+      "Modern, şık ve kullanıcı dostu web siteleri tasarlayan ve geliştiren bir front-end geliştiriciyim. Yenilikçi teknolojilerle markanızın dijital dünyadaki yüzünü en iyi şekilde temsil edecek çözümler sunuyorum.",
     description2: "",
     description3: "",
     profileImage: "/avatar.jpg",
@@ -282,46 +281,36 @@ function Services() {
   const services = [
     {
       title: "Web Geliştirme",
-      image: "/web-dev.jpg",
       description:
-        "Modern ve performanslı web siteleri ile dijital dünyada yerinizi alın. Size özel çözümlerle markanızı en iyi şekilde temsil ediyoruz.",
+        "Modern ve performanslı web siteleri geliştirerek dijital varlığınızı güçlendiriyorum. Size özel çözümlerle fikrinizi en iyi şekilde hayata geçiriyorum.",
       link: "#contact",
     },
     {
       title: "UI/UX Tasarımı",
-      image: "/ui-ux.jpg",
       description:
-        "Kullanıcı dostu ve estetik arayüzler tasarlayarak, kullanıcılarınızın web sitenizde keyifli bir deneyim yaşamasını sağlıyoruz.",
+        "Kullanıcı dostu ve estetik arayüzler tasarlayarak, ziyaretçilerinizin web sitenizde keyifli bir deneyim yaşamasını sağlıyorum.",
       link: "#contact",
     },
     {
       title: "SEO Optimizasyonu",
-      image: "/seo.jpg",
       description:
-        "Arama motorlarında üst sıralarda yer alarak daha fazla müşteriye ulaşın. Sitenizi SEO uyumlu hale getirerek organik trafiğinizi artırıyoruz.",
+        "Arama motorlarında üst sıralarda yer almanız için sitenizi SEO uyumlu hale getirerek organik trafiğinizi artırıyorum.",
       link: "#contact",
     },
     {
       title: "Sosyal Medya Yönetimi",
-      image: "/social.jpg",
       description:
-        "Sosyal medya hesaplarınızı profesyonelce yöneterek marka bilinirliğinizi artırıyor ve hedef kitlenizle etkileşiminizi güçlendiriyoruz.",
+        "Sosyal medya hesaplarınızı profesyonelce yöneterek marka bilinirliğinizi artırıyor ve hedef kitlenizle etkileşiminizi geliştiriyorum.",
       link: "#contact",
     },
   ];
 
   return (
     <section className="services" id="services">
-      <h2 className="section-title">Hizmetler</h2>
+      <h2 className="section-title">Neler Yapıyorum ?</h2>
       <div className="services-grid">
         {services.map((service, index) => (
           <div key={index} className="service-card">
-            <div className="service-image-container">
-              <img
-                src={process.env.PUBLIC_URL + service.image}
-                alt={service.title}
-              />
-            </div>
             <h3>{service.title}</h3>
             <p>{service.description}</p>
             <Link
@@ -341,11 +330,6 @@ function Services() {
 }
 
 function Footer() {
-  const socialData = {
-    linkedin: "https://www.linkedin.com/in/mert-saykal/",
-    github: "https://github.com/riavenn",
-    email: "mertsaykal0@gmail.com",
-  };
 
   return (
     <footer className="footer">
@@ -354,25 +338,6 @@ function Footer() {
           <div className="logo-underline"></div>
         </div>
         <div className="copyright">© 2025 Tüm hakları saklıdır.</div>
-      </div>
-      <div className="footer-bottom">
-        <div className="social-icons">
-          <a
-            href={socialData.linkedin}
-            target="_blank"
-            rel="noopener noreferrer">
-            <FaLinkedinIn />
-          </a>
-          <a
-            href={socialData.github}
-            target="_blank"
-            rel="noopener noreferrer">
-            <FaGithub />
-          </a>
-          <a href={`mailto:${socialData.email}`}>
-            <FaEnvelope />
-          </a>
-        </div>
       </div>
     </footer>
   );
