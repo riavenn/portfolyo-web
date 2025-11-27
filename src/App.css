@@ -795,6 +795,16 @@ body {
     margin-top: 1rem;
   }
 
+  .profile-text .header-text-content {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .profile-text .about-me-container {
+    text-align: center;
+    margin: 0 auto;
+  }
+
   /* Mobile styles for relocated name and title */
   .profile-name {
     font-size: 1.5rem;
